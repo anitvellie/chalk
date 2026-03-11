@@ -1,0 +1,78 @@
+# ──────────────────────────────────────────
+# Xcode
+# ──────────────────────────────────────────
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+*.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+*.xcuserstate
+
+# Archived builds and symbols
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode Instruments traces
+*.trace
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# ──────────────────────────────────────────
+# Swift Package Manager
+# ──────────────────────────────────────────
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+
+# ──────────────────────────────────────────
+# CocoaPods (not used; kept as safety net)
+# ──────────────────────────────────────────
+Pods/
+*.xcworkspace
+
+# ──────────────────────────────────────────
+# Carthage (not used; kept as safety net)
+# ──────────────────────────────────────────
+Carthage/Build/
+
+# ──────────────────────────────────────────
+# macOS
+# ──────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ──────────────────────────────────────────
+# Fastlane (if added later)
+# ──────────────────────────────────────────
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+fastlane/readme.md
+
+# ──────────────────────────────────────────
+# Misc
+# ──────────────────────────────────────────
+*.orig
+*.log
+.env
