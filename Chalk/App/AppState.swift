@@ -1,9 +1,5 @@
 // AppState.swift
 // Chalk — Central Observable App State
-//
-// Phase 1: Scaffold stub — properties declared, no logic implemented.
-// TODO: Phase 2 — Wire up HealthKitManager and persistence.
-// TODO: Phase 3 — Drive UI from this state object.
 
 import SwiftUI
 import Combine
@@ -15,19 +11,20 @@ final class AppState: ObservableObject {
 
     // MARK: - Published Properties
 
-    /// User-defined workout categories (e.g. Running, Yoga, Upper Body).
+    /// User-defined workout categories (e.g. Strength, Running, Yoga).
     @Published var categories: [WorkoutCategory] = []
 
     /// All workout entries sourced from HealthKit or entered manually.
+    /// Not persisted — always fetched fresh from HealthKit.
     @Published var entries: [WorkoutEntry] = []
 
-    /// Weekly goal snapshots derived from categories + entries for the current ISO week.
+    /// Weekly goal snapshots for the current ISO week, one per category.
     @Published var weeklyGoals: [WeeklyGoal] = []
 
     /// Whether the user has granted HealthKit read permissions.
     @Published var healthKitAuthorized: Bool = false
 
-    /// True while an async data-loading operation is in flight.
+    /// `true` while an async data-loading operation is in flight.
     @Published var isLoading: Bool = false
 
     /// Non-nil when a recoverable error should be surfaced to the user.
@@ -35,20 +32,81 @@ final class AppState: ObservableObject {
 
     // MARK: - Dependencies
 
-    // TODO: Phase 2 — Inject HealthKitManager here (as a property or via environment).
+    private let healthKitManager = HealthKitManager()
 
     // MARK: - Init
 
     init() {
-        // TODO: Phase 2 — Request HealthKit authorisation on first launch.
-        // TODO: Phase 2 — Load persisted categories from App Group UserDefaults.
-        // TODO: Phase 3 — Seed WorkoutCategory.defaults during onboarding if no categories exist.
-        // TODO: Phase 3 — Trigger initial HealthKit fetch after authorisation.
+        loadCategories()
     }
 
-    // MARK: - Intent Methods (Phase 3+)
+    // MARK: - HealthKit Setup
+
+    /// Requests HealthKit authorisation and performs the initial goals fetch.
+    ///
+    /// Call this once from the root view's `.task` modifier.
+    /// Safe to call multiple times — HealthKit's permission sheet only appears once.
+    func setupHealthKit() async {
+        guard HealthKitManager.isAvailable else {
+            // Simulator or unsupported device — populate goals with 0 counts so the UI
+            // renders correctly without real data.
+            weeklyGoals = categories.map { WeeklyGoal(category: $0, completedCount: 0) }
+            return
+        }
+
+        do {
+            try await healthKitManager.requestAuthorization(for: categories)
+            healthKitAuthorized = true
+            await refreshGoals()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    // MARK: - Data Refresh
+
+    /// Re-fetches weekly goal counts from HealthKit for the current ISO week.
+    ///
+    /// Safe to call from a pull-to-refresh control or after a new category is added.
+    func refreshGoals() async {
+        guard healthKitAuthorized else { return }
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            weeklyGoals = try await healthKitManager.fetchCurrentWeekGoals(for: categories)
+            errorMessage = nil
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    // MARK: - Persistence (categories only)
+
+    /// Loads categories from the shared App Group UserDefaults.
+    /// Falls back to `UserDefaults.standard` if the App Group is not yet configured.
+    /// Seeds from `HealthKitManager.defaultCategories` on first launch.
+    private func loadCategories() {
+        let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
+        if let data = store.data(forKey: "categories"),
+           let saved = try? JSONDecoder().decode([WorkoutCategory].self, from: data) {
+            categories = saved
+        } else {
+            categories = HealthKitManager.defaultCategories
+            saveCategories()
+        }
+    }
+
+    /// Persists the current categories to the shared App Group UserDefaults.
+    func saveCategories() {
+        let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
+        if let data = try? JSONEncoder().encode(categories) {
+            store.set(data, forKey: "categories")
+        }
+    }
+
+    // MARK: - Category Management (Phase 3)
 
     // TODO: Phase 3 — func addCategory(_ category: WorkoutCategory)
     // TODO: Phase 3 — func deleteCategory(id: UUID)
-    // TODO: Phase 3 — func refreshGoals() async
+    // TODO: Phase 3 — func updateCategory(_ category: WorkoutCategory)
 }

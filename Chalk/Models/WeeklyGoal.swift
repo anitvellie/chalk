@@ -1,8 +1,6 @@
 // WeeklyGoal.swift
 // Chalk — Derived Data Model
 //
-// Phase 1: Scaffold stub — struct shape defined, compute logic deferred to Phase 2.
-//
 // WeeklyGoal is a *derived* type: it is never stored directly.
 // It is computed from WorkoutEntry records filtered to the current ISO week
 // (Monday–Sunday) and combined with the owning WorkoutCategory's target.
@@ -53,30 +51,38 @@ struct WeeklyGoal: Identifiable {
     }
 }
 
-// MARK: - Factory (Phase 2)
+// MARK: - Factory
 
 extension WeeklyGoal {
 
-    // TODO: Phase 2 — Implement:
-    //
-    // /// Computes a WeeklyGoal for a category by counting matching entries in the current ISO week.
-    // /// - Parameters:
-    // ///   - category: The category to evaluate.
-    // ///   - entries: All available WorkoutEntry records.
-    // /// - Returns: A populated WeeklyGoal snapshot.
-    // static func compute(for category: WorkoutCategory, from entries: [WorkoutEntry]) -> WeeklyGoal {
-    //     let weekEntries = entries.filter { entry in
-    //         entry.categoryId == category.id && Calendar.iso8601.isInCurrentISOWeek(entry.date)
-    //     }
-    //     return WeeklyGoal(category: category, completedCount: weekEntries.count)
-    // }
+    /// Computes a `WeeklyGoal` by counting entries that fall in the current ISO week.
+    ///
+    /// - Parameters:
+    ///   - category: The category to evaluate.
+    ///   - entries: All available `WorkoutEntry` records (superset is fine).
+    /// - Returns: A populated `WeeklyGoal` snapshot for this week.
+    static func compute(for category: WorkoutCategory, from entries: [WorkoutEntry]) -> WeeklyGoal {
+        let calendar = Calendar.iso8601
+        let now = Date()
+        let count = entries.filter { entry in
+            entry.categoryId == category.id &&
+            calendar.isDate(entry.date, inSameISOWeekAs: now)
+        }.count
+        return WeeklyGoal(category: category, completedCount: count)
+    }
 }
 
-// MARK: - Calendar ISO Week Helper (Phase 2)
+// MARK: - Calendar ISO Week Helpers
 
 extension Calendar {
 
-    // TODO: Phase 2 — Expose a convenience `iso8601` static Calendar
-    //   and an `isInCurrentISOWeek(_ date: Date) -> Bool` helper
-    //   that computes the Monday–Sunday window for today.
+    /// An ISO 8601 calendar where weeks run Monday–Sunday.
+    static let iso8601 = Calendar(identifier: .iso8601)
+
+    /// Returns `true` if `date` falls in the same ISO week as `referenceDate`.
+    func isDate(_ date: Date, inSameISOWeekAs referenceDate: Date) -> Bool {
+        let a = dateComponents([.weekOfYear, .yearForWeekOfYear], from: date)
+        let b = dateComponents([.weekOfYear, .yearForWeekOfYear], from: referenceDate)
+        return a.weekOfYear == b.weekOfYear && a.yearForWeekOfYear == b.yearForWeekOfYear
+    }
 }
