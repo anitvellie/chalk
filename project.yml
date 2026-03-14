@@ -101,6 +101,7 @@ targets:
       properties:
         CFBundleName: Chalk
         WKApplication: true
+        WKCompanionAppBundleIdentifier: com.placeholder.Chalk  # ← Must match iOS app bundle ID
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.placeholder.Chalk.watchkitapp  # ← Replace with your real bundle ID
