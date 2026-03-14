@@ -73,6 +73,10 @@ targets:
           - "**/.gitkeep"
     entitlements:
       path: Chalk/Chalk.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.security.application-groups:
+          - group.com.placeholder.Chalk  # ← Replace with your real App Group ID
     info:
       path: Chalk/Info.plist
       properties:
@@ -111,6 +115,9 @@ targets:
           - "**/.gitkeep"
     entitlements:
       path: Chalk/Widgets/ChalkWidgetExtension/ChalkWidgetExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.placeholder.Chalk  # ← Replace with your real App Group ID
     info:
       path: Chalk/Widgets/ChalkWidgetExtension/Info.plist
       properties:
@@ -133,6 +140,10 @@ targets:
       - path: ChalkWatch
         excludes:
           - "**/.gitkeep"
+    entitlements:
+      path: ChalkWatch/ChalkWatch.entitlements
+      properties:
+        com.apple.developer.healthkit: true
     info:
       path: ChalkWatch/Info.plist
       properties:
