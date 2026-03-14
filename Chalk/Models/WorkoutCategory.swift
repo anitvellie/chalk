@@ -1,8 +1,5 @@
 // WorkoutCategory.swift
 // Chalk — Data Model
-//
-// Phase 1: Scaffold stub — properties and default seed data declared.
-// No persistence or HealthKit logic implemented yet.
 
 import Foundation
 
@@ -34,7 +31,7 @@ struct WorkoutCategory: Identifiable, Codable, Hashable {
     var targetPerWeek: Int
 
     /// Raw integer values of the `HKWorkoutActivityType` cases this category maps to.
-    /// Populated in Phase 2 when HealthKit integration is implemented.
+    /// Resolved from enum cases in `HealthKitManager.defaultCategories` — never hardcoded.
     var activityTypeRawValues: [Int]
 
     // MARK: - Init
@@ -60,42 +57,33 @@ struct WorkoutCategory: Identifiable, Codable, Hashable {
 
 extension WorkoutCategory {
 
-    /// Default categories shown during first-launch onboarding.
+    /// Shape-only default categories (no HK raw values) used as a fallback reference.
     ///
-    /// HK activity type raw values are left empty here and will be assigned in Phase 2
-    /// once the HealthKit mapping layer is built.
+    /// The HK-aware version — with `activityTypeRawValues` correctly populated from
+    /// `HKWorkoutActivityType.case.rawValue` — lives in `HealthKitManager.defaultCategories`.
+    /// `AppState.loadCategories()` seeds from that source on first launch.
+    ///
+    /// Upper Body and Legs are merged into **Strength** because both map to
+    /// `HKWorkoutActivityType.traditionalStrengthTraining` in HealthKit with no
+    /// reliable way to distinguish them from workout metadata alone.
     static let defaults: [WorkoutCategory] = [
         WorkoutCategory(
-            name: "Upper Body",
+            name: "Strength",
             icon: "figure.strengthtraining.traditional",
             colorHex: "#135bec",
-            targetPerWeek: 2,
-            activityTypeRawValues: []
-            // TODO: Phase 2 — map to HK .traditionalStrengthTraining + .functionalStrengthTraining
-        ),
-        WorkoutCategory(
-            name: "Legs",
-            icon: "figure.strengthtraining.functional",
-            colorHex: "#34c759",
-            targetPerWeek: 2,
-            activityTypeRawValues: []
-            // TODO: Phase 2 — map to HK .traditionalStrengthTraining (name-filtered) + .cycling
+            targetPerWeek: 4
         ),
         WorkoutCategory(
             name: "Running",
             icon: "figure.run",
             colorHex: "#ff9500",
-            targetPerWeek: 3,
-            activityTypeRawValues: []
-            // TODO: Phase 2 — map to HK .running
+            targetPerWeek: 3
         ),
         WorkoutCategory(
             name: "Yoga",
             icon: "figure.yoga",
             colorHex: "#af52de",
-            targetPerWeek: 1,
-            activityTypeRawValues: []
-            // TODO: Phase 2 — map to HK .yoga + .mindAndBody
+            targetPerWeek: 1
         )
     ]
 }
