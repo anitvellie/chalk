@@ -19,6 +19,43 @@ settings:
     SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: ""   # ← Fill in your Apple Developer Team ID in Xcode
 
+schemes:
+
+  Chalk:
+    build:
+      targets:
+        Chalk: all
+        ChalkWidgetExtension: [build]
+        ChalkWatch: [build]
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  ChalkWidgetExtension:
+    build:
+      targets:
+        ChalkWidgetExtension: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  ChalkWatch:
+    build:
+      targets:
+        ChalkWatch: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
 targets:
 
   # ───────────────────────────────────────────────────────
