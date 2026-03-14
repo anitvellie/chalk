@@ -71,6 +71,11 @@ fastlane/test_output/
 fastlane/readme.md
 
 # ──────────────────────────────────────────
+# Local signing config (never commit team ID)
+# ──────────────────────────────────────────
+Config/DevelopmentTeam.xcconfig
+
+# ──────────────────────────────────────────
 # Misc
 # ──────────────────────────────────────────
 *.orig

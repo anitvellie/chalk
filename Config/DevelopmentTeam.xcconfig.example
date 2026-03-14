@@ -1,0 +1,9 @@
+// DevelopmentTeam.xcconfig.example
+//
+// Copy this file to DevelopmentTeam.xcconfig (gitignored) and fill in your team ID.
+// Find your Team ID at: developer.apple.com → Account → Membership Details
+// Or in Xcode: Signing & Capabilities → Team dropdown (shown in parentheses).
+//
+//   cp Config/DevelopmentTeam.xcconfig.example Config/DevelopmentTeam.xcconfig
+
+DEVELOPMENT_TEAM = YOUR_TEAM_ID_HERE

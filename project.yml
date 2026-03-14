@@ -14,10 +14,16 @@ configs:
   Debug: debug
   Release: release
 
+# Team ID lives in Config/DevelopmentTeam.xcconfig (gitignored).
+# First-time setup: cp Config/DevelopmentTeam.xcconfig.example Config/DevelopmentTeam.xcconfig
+configFiles:
+  Debug: Config/DevelopmentTeam.xcconfig
+  Release: Config/DevelopmentTeam.xcconfig
+
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    DEVELOPMENT_TEAM: ""   # ← Fill in your Apple Developer Team ID in Xcode
+    CODE_SIGN_STYLE: Automatic
 
 schemes:
 

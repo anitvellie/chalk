@@ -80,6 +80,7 @@
 		890CFC29F19A7AA049E3A376 /* ChalkWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWidgetExtension.swift; sourceTree = "<group>"; };
 		90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChalkWatch.entitlements; sourceTree = "<group>"; };
 		98F12DA7CE371E02E20D1218 /* Chalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chalk.entitlements; sourceTree = "<group>"; };
+		B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
 		BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
 		C74F5CE05460B30B34DAFCCE /* ChalkWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChalkWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8CFC5970008E3F85BAED603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +96,7 @@
 				1EC4DC4C82D9DF710FE33CBB /* Chalk */,
 				457F7429181C62F803068948 /* ChalkWatch */,
 				CA9FF59F23214280DB658B24 /* ChalkWidgetExtension */,
+				42919C05B0FF2E95627A3555 /* Config */,
 				DA2305D25716715A5B93675D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,6 +114,14 @@
 				6523D743F07E4B507027D7DB /* Info.plist */,
 			);
 			path = Chalk;
+			sourceTree = "<group>";
+		};
+		42919C05B0FF2E95627A3555 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		457F7429181C62F803068948 /* ChalkWatch */ = {
@@ -252,12 +262,15 @@
 				TargetAttributes = {
 					166887360A5DA10F1795995D = {
 						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
 					};
 					3328DA0AF66E48D908073020 = {
 						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
 					};
 					7CBB71874FB9BB11BDF222D2 = {
 						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -404,6 +417,7 @@
 		};
 		909DC4A5E76503BE9584FE3F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -435,9 +449,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -515,6 +529,7 @@
 		};
 		DB1C1E6C2DAF8BC837963885 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -546,9 +561,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
