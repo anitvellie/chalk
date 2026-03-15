@@ -8,12 +8,14 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 ## Current Status
 - Phase 1: ✅ Complete
 - Phase 2: ✅ Complete
-- Phase 3: In progress
+- Phase 3: ✅ Complete
+- Phase 3.5: Upcoming (UI hardening + feedback)
 
 ## Phases
 - [x] Phase 1 — Project scaffold, data models, target setup
 - [x] Phase 2 — HealthKit integration
-- [ ] Phase 3 — Core UI (home screen, weekly overview, goal creation)
+- [x] Phase 3 — Core UI (home screen, weekly overview, goal creation)
+- [ ] Phase 3.5 — UI hardening (feedback, polish, edge cases)
 - [ ] Phase 4 — Widgets (home screen + lock screen via WidgetKit)
 - [ ] Phase 5 — watchOS companion app
 
@@ -122,6 +124,22 @@ All Phase 3 deliverables shipped:
 - Stats / History / Profile (real data, generic presentation)
 - Goal creation flow (AddGoalView sheet with type picker + frequency stepper)
 - Goal deletion (swipe-to-delete in Profile)
+
+### Known issues / deferred to Phase 3.5
+- `.chalkBackground()` is a `View` extension method — never use `Color.chalkBackground` (compile error)
+- No edit-frequency flow for existing goals (can only delete + re-add)
+- Stats/History/Profile use generic `List` presentation — visual polish deferred
+- `ProfileView` has a dead `showingAddGoal` state; Add Goal is only reachable via FAB
+
+## Phase 3.5 — UI Hardening
+Scope: address feedback, polish UI, fix edge cases before moving to widgets.
+Examples of work that belongs here:
+- Visual polish for Stats, History, Profile screens
+- Edit-frequency flow for existing goals
+- Accessibility / Dynamic Type pass
+- Empty-state improvements
+- Dark mode refinement
+- Any UX issues surfaced during real-device testing
 
 ## Version Control
 - Git is used from day one
