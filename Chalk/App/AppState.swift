@@ -65,7 +65,7 @@ final class AppState: ObservableObject {
 
     // MARK: - Data Refresh
 
-    /// Re-fetches weekly goal counts from HealthKit for the current ISO week.
+    /// Re-fetches weekly goal counts and entries from HealthKit for the current ISO week.
     ///
     /// Safe to call from a pull-to-refresh control or after a new category is added.
     func refreshGoals() async {
@@ -74,6 +74,7 @@ final class AppState: ObservableObject {
         defer { isLoading = false }
         do {
             weeklyGoals = try await healthKitManager.fetchCurrentWeekGoals(for: categories)
+            entries = try await healthKitManager.fetchCurrentWeekEntries(for: categories)
             errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
@@ -104,9 +105,23 @@ final class AppState: ObservableObject {
         }
     }
 
-    // MARK: - Category Management (Phase 3)
+    // MARK: - Category Management
 
-    // TODO: Phase 3 — func addCategory(_ category: WorkoutCategory)
-    // TODO: Phase 3 — func deleteCategory(id: UUID)
-    // TODO: Phase 3 — func updateCategory(_ category: WorkoutCategory)
+    func addCategory(_ category: WorkoutCategory) {
+        categories.append(category)
+        saveCategories()
+    }
+
+    func deleteCategory(id: UUID) {
+        categories.removeAll { $0.id == id }
+        weeklyGoals.removeAll { $0.category.id == id }
+        entries.removeAll { $0.categoryId == id }
+        saveCategories()
+    }
+
+    func updateCategory(_ category: WorkoutCategory) {
+        guard let index = categories.firstIndex(where: { $0.id == category.id }) else { return }
+        categories[index] = category
+        saveCategories()
+    }
 }

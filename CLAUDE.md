@@ -81,12 +81,36 @@ distinguish them from workout metadata. Current defaults:
 ### Manual logging
 - Supported in a later phase (Phase 3+)
 
-## Phase 3 Starting Point
-`ContentView` in `ChalkApp.swift` is currently a **temporary Phase 2 debug harness** (goal list + pull-to-refresh). Phase 3 replaces it entirely with the real bottom-tab navigation shell:
-- Bottom tab bar: Home, Stats, History, Profile
-- Centered floating Add button
-- `AppState` already exposes `categories`, `weeklyGoals`, `isLoading`, `errorMessage`, `refreshGoals()`, `setupHealthKit()`
-- Category management stubs in `AppState` are ready to be implemented: `addCategory`, `deleteCategory`, `updateCategory`
+### Phase 3 — UI (decisions made so far)
+
+#### Navigation shell
+- `Tab` enum defined in `RootView.swift`; `RootView` owns the `.task { setupHealthKit() }` call
+- `TabView` with `.toolbar(.hidden, for: .tabBar)` + `.safeAreaInset(edge: .bottom)` reserves space for the custom bar
+- `CustomTabBar` has 5 visual slots (Home | Stats | FAB | History | Profile); FAB uses `.offset(y: -16)` to straddle the bar's top edge
+- Tab bar background: `.ultraThinMaterial` with `.ignoresSafeArea(edges: .bottom)` so it covers the home-indicator area
+- Active tab icon uses `"\(icon).fill"` variant in `#135bec`; inactive uses outline in `.secondary`
+
+#### Home screen
+- 2-column `LazyVGrid` of `GoalCardView`s; week range shown as subtitle below the large nav title
+- `.chalkBackground()` is a `ViewModifier` reading `@Environment(\.colorScheme)` — picks `#f6f6f8` (light) or `#101622` (dark), no UIKit needed
+
+#### Goal card
+- `GoalCardView`: glass card via `.background(.regularMaterial)` + `RoundedRectangle` stroke border
+- `SegmentedRingView`: `Canvas`-drawn arcs — N segments with **6° gap** between each; completed segments use category colour, pending use `.gray.opacity(0.2)`
+
+#### Stats / History / Profile
+- Stats: total sessions row + per-category `ProgressView` bars; real HK data, `List` presentation
+- History: sorted entry list; each row shows category chip, date/time, duration, HK source badge; `ContentUnavailableView` for empty state
+- Profile: category list (name, target, icon chip) + HK auth status; goal editing wired up in goal-creation flow
+
+#### AppState / HealthKit
+- `refreshGoals()` now also populates `entries` (two sequential HK fetches: goals then entries)
+- `HealthKitManager.fetchCurrentWeekEntries(for:)` mirrors `fetchCurrentWeekGoals` but returns flat `[WorkoutEntry]` sorted newest-first
+- `addCategory`, `deleteCategory`, `updateCategory` implemented in `AppState`
+
+## Phase 3 Remaining
+- Goal creation / editing flow (triggered by FAB → sheet)
+- Folder `Features/Goals/` is empty — goal creation UI goes here
 
 ## Version Control
 - Git is used from day one
@@ -106,17 +130,24 @@ Chalk/                              ← git repo root
 │   └── DevelopmentTeam.xcconfig    ← gitignored; set DEVELOPMENT_TEAM here
 ├── Chalk/                          ← iOS app sources
 │   ├── App/
-│   │   ├── ChalkApp.swift          ← @main entry + Color(hex:) utility + ContentView (temp Phase 2 harness)
+│   │   ├── ChalkApp.swift          ← @main entry + Color(hex:) + chalkBackground modifier
+│   │   ├── RootView.swift          ← TabView shell + CustomTabBar + Tab enum
 │   │   └── AppState.swift          ← central @MainActor ObservableObject
 │   ├── Models/
 │   │   ├── WorkoutCategory.swift
 │   │   ├── WorkoutEntry.swift      ← includes WorkoutSource enum
 │   │   └── WeeklyGoal.swift        ← includes Calendar.iso8601 extension
-│   ├── Features/                   ← empty; Phase 3 fills these in
+│   ├── Features/
 │   │   ├── Home/
+│   │   │   ├── HomeView.swift      ← 2-col goal card grid + week range header
+│   │   │   └── GoalCardView.swift  ← glass card + SegmentedRingView (Canvas)
 │   │   ├── Stats/
+│   │   │   └── StatsView.swift     ← total sessions + per-category progress bars
 │   │   ├── History/
-│   │   └── Goals/
+│   │   │   └── HistoryView.swift   ← sorted entry list with category chip + duration
+│   │   ├── Profile/
+│   │   │   └── ProfileView.swift   ← category list + HK auth status
+│   │   └── Goals/                  ← empty; goal creation flow goes here (Phase 3)
 │   ├── HealthKit/
 │   │   └── HealthKitManager.swift  ← sole HealthKit importer; includes defaultCategories seed data
 │   ├── Shared/

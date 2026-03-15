@@ -174,6 +174,27 @@ final class HealthKitManager: ObservableObject {
         return goals
     }
 
+    /// Fetches all workout entries across all categories for the current ISO week.
+    ///
+    /// Used to populate `AppState.entries` for the History tab.
+    /// Results are sorted newest-first.
+    func fetchCurrentWeekEntries(for categories: [WorkoutCategory]) async throws -> [WorkoutEntry] {
+        let calendar = Calendar.iso8601
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: Date()) else {
+            return []
+        }
+        var allEntries: [WorkoutEntry] = []
+        for category in categories {
+            let entries = try await fetchWorkouts(
+                for: category,
+                from: weekInterval.start,
+                to: weekInterval.end
+            )
+            allEntries.append(contentsOf: entries)
+        }
+        return allEntries.sorted { $0.date > $1.date }
+    }
+
     // MARK: - Background Delivery
 
     /// Registers HealthKit observer queries so the system can wake the app
