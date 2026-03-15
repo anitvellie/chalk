@@ -46,7 +46,7 @@ struct HomeView: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .refreshable { await appState.refreshGoals() }
-            .background(Color.chalkBackground)
+            .chalkBackground()
             .navigationTitle("Chalk")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
