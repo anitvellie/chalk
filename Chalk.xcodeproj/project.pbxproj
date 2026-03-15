@@ -8,17 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		022931DC27BCAFEFFDAA8324 /* ChalkWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = C74F5CE05460B30B34DAFCCE /* ChalkWatch.app */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		03AC0030E12E62866251762B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7699C284F9D58C082638E2 /* HistoryView.swift */; };
 		0ECAD737BD11820127F1EF47 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25650C2677D84948E833BB97 /* AppState.swift */; };
+		25CB557B1A68044FE201EC31 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DE07972FE885C4C9F560F /* ProfileView.swift */; };
 		264EB195993937894AE49E50 /* ChalkWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890CFC29F19A7AA049E3A376 /* ChalkWidgetExtension.swift */; };
 		272CC2B8398F95466EB6A27D /* ChalkWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */; };
 		3278B5BB384191F27BC87BEE /* WorkoutCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A638B411D672AD02302874C /* WorkoutCategory.swift */; };
 		3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		39E8F6EA15A0388675697DDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4653102AB269C5F14198ED2 /* Assets.xcassets */; };
+		493A85FC55643523AFA99A28 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCA6A536DAA2D56D041F113 /* HomeView.swift */; };
 		58F3912B04F2D4C8E6228923 /* ChalkWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6B5DCC02344F72085492315F /* ChalkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9B4826674EA70468935362 /* ChalkApp.swift */; };
 		815574C0DC5556766D3BBB6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 871B0D601CAFFDC4967012FB /* Assets.xcassets */; };
+		88F48B97C79B69625A5CC2BA /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2F0EE1093E98C8172DC4F3 /* StatsView.swift */; };
+		9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8996BAC4BE1B0933799F2A /* RootView.swift */; };
 		AF9746C18CBB9F6E03ECCD98 /* WeeklyGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EC4AB09416D122BD6B0271 /* WeeklyGoal.swift */; };
+		D734CB39598AC5A1DE4E1770 /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B303376FFB68E0436611978 /* GoalCardView.swift */; };
 		DB2FF06516BF92CDDA2A4C57 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7B4A4B527C59DC38663E0 /* HealthKitManager.swift */; };
+		DC16BAE2D18FBF895E3DEA9D /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1873FB10790F679E6A5D4F /* AddGoalView.swift */; };
 		EAD788E2DD1AF9687D049C91 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */; };
 /* End PBXBuildFile section */
@@ -73,18 +80,25 @@
 		25650C2677D84948E833BB97 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ChalkWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9B4826674EA70468935362 /* ChalkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkApp.swift; sourceTree = "<group>"; };
+		3F7699C284F9D58C082638E2 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		4B303376FFB68E0436611978 /* GoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCardView.swift; sourceTree = "<group>"; };
 		4ED7B4A4B527C59DC38663E0 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		6523D743F07E4B507027D7DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		85189A9997D171E3E7757A20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		871B0D601CAFFDC4967012FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		890CFC29F19A7AA049E3A376 /* ChalkWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWidgetExtension.swift; sourceTree = "<group>"; };
+		8A2F0EE1093E98C8172DC4F3 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChalkWatch.entitlements; sourceTree = "<group>"; };
 		98F12DA7CE371E02E20D1218 /* Chalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chalk.entitlements; sourceTree = "<group>"; };
 		B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
 		BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
+		C08DE07972FE885C4C9F560F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		C74F5CE05460B30B34DAFCCE /* ChalkWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChalkWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8CFC5970008E3F85BAED603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CA3C505982B1A1393A892426 /* ChalkWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChalkWidgetExtension.entitlements; sourceTree = "<group>"; };
+		CD8996BAC4BE1B0933799F2A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		CFCA6A536DAA2D56D041F113 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		EB1873FB10790F679E6A5D4F /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		F4653102AB269C5F14198ED2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWatchApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +130,15 @@
 			path = Chalk;
 			sourceTree = "<group>";
 		};
+		24D6DD5EEEA912EF53A77E97 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				4B303376FFB68E0436611978 /* GoalCardView.swift */,
+				CFCA6A536DAA2D56D041F113 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		42919C05B0FF2E95627A3555 /* Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +158,30 @@
 			path = ChalkWatch;
 			sourceTree = "<group>";
 		};
+		51EF0F1F5A3CF90A185ABBC3 /* Goals */ = {
+			isa = PBXGroup;
+			children = (
+				EB1873FB10790F679E6A5D4F /* AddGoalView.swift */,
+			);
+			path = Goals;
+			sourceTree = "<group>";
+		};
+		531CA4F80E8218C3CA8D441A /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				8A2F0EE1093E98C8172DC4F3 /* StatsView.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		76FCF8B9F0797928DE0296B7 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				3F7699C284F9D58C082638E2 /* HistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		8BE6288F356FF9CD536E91E8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +195,7 @@
 			children = (
 				25650C2677D84948E833BB97 /* AppState.swift */,
 				2A9B4826674EA70468935362 /* ChalkApp.swift */,
+				CD8996BAC4BE1B0933799F2A /* RootView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -163,6 +211,11 @@
 		B45C4D4C4EEBBEE1859E423E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				51EF0F1F5A3CF90A185ABBC3 /* Goals */,
+				76FCF8B9F0797928DE0296B7 /* History */,
+				24D6DD5EEEA912EF53A77E97 /* Home */,
+				FDCB44174F571AD9AE3EE42D /* Profile */,
+				531CA4F80E8218C3CA8D441A /* Stats */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -196,6 +249,14 @@
 				0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		FDCB44174F571AD9AE3EE42D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				C08DE07972FE885C4C9F560F /* ProfileView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,15 +322,15 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					166887360A5DA10F1795995D = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YOUR_TEAM_ID_HERE;
 						ProvisioningStyle = Automatic;
 					};
 					3328DA0AF66E48D908073020 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YOUR_TEAM_ID_HERE;
 						ProvisioningStyle = Automatic;
 					};
 					7CBB71874FB9BB11BDF222D2 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YOUR_TEAM_ID_HERE;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -334,10 +395,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC16BAE2D18FBF895E3DEA9D /* AddGoalView.swift in Sources */,
 				0ECAD737BD11820127F1EF47 /* AppState.swift in Sources */,
 				6B5DCC02344F72085492315F /* ChalkApp.swift in Sources */,
+				D734CB39598AC5A1DE4E1770 /* GoalCardView.swift in Sources */,
 				DB2FF06516BF92CDDA2A4C57 /* HealthKitManager.swift in Sources */,
+				03AC0030E12E62866251762B /* HistoryView.swift in Sources */,
+				493A85FC55643523AFA99A28 /* HomeView.swift in Sources */,
+				25CB557B1A68044FE201EC31 /* ProfileView.swift in Sources */,
+				9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */,
 				3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */,
+				88F48B97C79B69625A5CC2BA /* StatsView.swift in Sources */,
 				AF9746C18CBB9F6E03ECCD98 /* WeeklyGoal.swift in Sources */,
 				3278B5BB384191F27BC87BEE /* WorkoutCategory.swift in Sources */,
 				FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */,
