@@ -82,7 +82,7 @@ struct AddGoalView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 32)
             }
-            .background(Color.chalkBackground)
+            .chalkBackground()
             .animation(.spring(duration: 0.3), value: selectedTemplate?.id)
             .navigationTitle("Add Goal")
             .navigationBarTitleDisplayMode(.inline)
