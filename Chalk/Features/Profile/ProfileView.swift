@@ -9,6 +9,7 @@ import SwiftUI
 struct ProfileView: View {
 
     @EnvironmentObject var appState: AppState
+    @State private var showingAddGoal = false
 
     var body: some View {
         NavigationStack {
@@ -21,6 +22,9 @@ struct ProfileView: View {
                     } else {
                         ForEach(appState.categories) { category in
                             categoryRow(category)
+                        }
+                        .onDelete { indexSet in
+                            indexSet.forEach { appState.deleteCategory(id: appState.categories[$0].id) }
                         }
                     }
                 }
@@ -38,6 +42,14 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    EditButton()
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddGoal) {
+            AddGoalView()
         }
     }
 

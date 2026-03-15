@@ -108,9 +108,20 @@ distinguish them from workout metadata. Current defaults:
 - `HealthKitManager.fetchCurrentWeekEntries(for:)` mirrors `fetchCurrentWeekGoals` but returns flat `[WorkoutEntry]` sorted newest-first
 - `addCategory`, `deleteCategory`, `updateCategory` implemented in `AppState`
 
-## Phase 3 Remaining
-- Goal creation / editing flow (triggered by FAB → sheet)
-- Folder `Features/Goals/` is empty — goal creation UI goes here
+#### Goal creation (AddGoalView)
+- `HealthKitManager.categoryLibrary` — `static let` (lazy, evaluated once) giving all 8 supported types stable UUIDs; superset of `defaultCategories`
+- `AddGoalView` filters the library to exclude already-tracked HK activity raw values so you can't add duplicates
+- Tile selection stores the template in `@State`; tapping again deselects; frequency resets to library default on each new selection
+- `commitSelection()` copies the template, overwrites `targetPerWeek`, calls `appState.addCategory`, dismisses, then fires `Task { await appState.refreshGoals() }`
+- `ProfileView` has `.onDelete` (swipe-to-delete) + `EditButton` in toolbar
+
+## Phase 3 Status: ✅ Complete
+All Phase 3 deliverables shipped:
+- Navigation shell (tab bar + FAB)
+- Home screen (goal card grid with segmented rings)
+- Stats / History / Profile (real data, generic presentation)
+- Goal creation flow (AddGoalView sheet with type picker + frequency stepper)
+- Goal deletion (swipe-to-delete in Profile)
 
 ## Version Control
 - Git is used from day one
@@ -147,7 +158,8 @@ Chalk/                              ← git repo root
 │   │   │   └── HistoryView.swift   ← sorted entry list with category chip + duration
 │   │   ├── Profile/
 │   │   │   └── ProfileView.swift   ← category list + HK auth status
-│   │   └── Goals/                  ← empty; goal creation flow goes here (Phase 3)
+│   │   └── Goals/
+│   │       └── AddGoalView.swift   ← type picker grid + frequency stepper sheet
 │   ├── HealthKit/
 │   │   └── HealthKitManager.swift  ← sole HealthKit importer; includes defaultCategories seed data
 │   ├── Shared/

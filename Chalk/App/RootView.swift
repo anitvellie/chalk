@@ -36,17 +36,7 @@ struct RootView: View {
             CustomTabBar(selectedTab: $selectedTab, onAdd: { showingAddGoal = true })
         }
         .sheet(isPresented: $showingAddGoal) {
-            // TODO: Phase 3 — Goal creation flow
-            VStack(spacing: 16) {
-                Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(Color(hex: "#135bec"))
-                Text("Add Goal")
-                    .font(.title2.bold())
-                Text("Goal creation coming soon.")
-                    .foregroundStyle(.secondary)
-            }
-            .presentationDetents([.medium])
+            AddGoalView()
         }
         .task {
             await appState.setupHealthKit()

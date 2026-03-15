@@ -60,6 +60,82 @@ final class HealthKitManager: ObservableObject {
         ]
     }
 
+    // MARK: - Category Library (full picker catalog)
+
+    /// Complete catalog of every workout type Chalk can track.
+    ///
+    /// Evaluated once (lazy `static let`), giving each template a stable UUID so the
+    /// `AddGoalView` grid can rely on identity-based selection across renders.
+    /// `defaultCategories` is a subset of this library (first 3 entries).
+    static let categoryLibrary: [WorkoutCategory] = {
+        [
+            WorkoutCategory(
+                name: "Strength",
+                icon: "figure.strengthtraining.traditional",
+                colorHex: "#135bec",
+                targetPerWeek: 4,
+                activityTypeRawValues: [
+                    Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue),
+                    Int(HKWorkoutActivityType.functionalStrengthTraining.rawValue)
+                ]
+            ),
+            WorkoutCategory(
+                name: "Running",
+                icon: "figure.run",
+                colorHex: "#ff9500",
+                targetPerWeek: 3,
+                activityTypeRawValues: [Int(HKWorkoutActivityType.running.rawValue)]
+            ),
+            WorkoutCategory(
+                name: "Yoga",
+                icon: "figure.yoga",
+                colorHex: "#af52de",
+                targetPerWeek: 1,
+                activityTypeRawValues: [
+                    Int(HKWorkoutActivityType.yoga.rawValue),
+                    Int(HKWorkoutActivityType.mindAndBody.rawValue)
+                ]
+            ),
+            WorkoutCategory(
+                name: "Cycling",
+                icon: "figure.outdoor.cycle",
+                colorHex: "#30d158",
+                targetPerWeek: 3,
+                activityTypeRawValues: [Int(HKWorkoutActivityType.cycling.rawValue)]
+            ),
+            WorkoutCategory(
+                name: "Walking",
+                icon: "figure.walk",
+                colorHex: "#32ade6",
+                targetPerWeek: 5,
+                activityTypeRawValues: [Int(HKWorkoutActivityType.walking.rawValue)]
+            ),
+            WorkoutCategory(
+                name: "HIIT",
+                icon: "figure.highintensity.intervaltraining",
+                colorHex: "#ff453a",
+                targetPerWeek: 2,
+                activityTypeRawValues: [
+                    Int(HKWorkoutActivityType.highIntensityIntervalTraining.rawValue)
+                ]
+            ),
+            WorkoutCategory(
+                name: "Swimming",
+                icon: "figure.pool.swim",
+                colorHex: "#64d2ff",
+                targetPerWeek: 2,
+                activityTypeRawValues: [Int(HKWorkoutActivityType.swimming.rawValue)]
+            ),
+            WorkoutCategory(
+                name: "Rowing",
+                icon: "figure.rowing",
+                colorHex: "#ff9f0a",
+                targetPerWeek: 2,
+                activityTypeRawValues: [Int(HKWorkoutActivityType.rowing.rawValue)]
+            ),
+        ]
+    }()
+
     // MARK: - Authorisation
 
     /// Requests HealthKit read permission for workout data.
