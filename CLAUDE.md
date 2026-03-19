@@ -35,7 +35,7 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 - Visual motifs: tally marks as progress metaphor, subtle chalkboard texture in dark mode
 - Glass morphism cards: frosted white/dark backgrounds with subtle borders
 - Segmented progress rings per category (circular progress, SVG-style)
-- Bottom tab bar: Home, Stats, History, Profile + centered floating add button
+- Bottom tab bar: Home, History, Profile (3 tabs, no FAB)
 - Refer to /Design/ folder for screen mockups (widget, weekly overview, goal creation)
 
 ## Data Model (agreed)
@@ -69,6 +69,14 @@ distinguish them from workout metadata. Current defaults:
 - A single `HKWorkoutType` authorisation request covers all activity types; no per-category request needed
 - Background delivery is **implemented** in `HealthKitManager.enableBackgroundDelivery()` but **not yet activated** — wire it up in Phase 4 alongside widget timeline refreshes; requires "Background Delivery" sub-capability in Xcode
 
+### Duplicate workout detection
+- `WorkoutEntry.isHidden: Bool` (default `false`) marks entries suppressed by overlap deduplication
+- Hidden entries are retained in `AppState.entries` for future use but excluded from goal counts and History
+- Dedup runs in `HealthKitManager.fetchWorkouts` as a two-pass process:
+  1. **Pass 1** — externalId dedup (defensive; prevents a single HK sample matching two activity types from being double-counted)
+  2. **Pass 2** — overlap dedup: entries are sorted by start date, grouped into overlapping time windows, and within each group all but the longest are marked `isHidden = true`; ties broken by earliest start date
+- Motivation: cross-app integrations (e.g. Nike Run Club → Strava) create duplicate HK samples for the same workout; since Chalk only tracks *that* a workout happened (not pace/distance), one entry per session is sufficient
+
 ### Persistence
 - **Categories**: JSON-encoded to App Group UserDefaults; falls back to `UserDefaults.standard` when App Group is not yet configured (safe for development before signing is finalised)
 - **WorkoutEntries**: not cached — fetched fresh from HealthKit on every `refreshGoals()` call
@@ -88,7 +96,7 @@ distinguish them from workout metadata. Current defaults:
 #### Navigation shell
 - `Tab` enum defined in `RootView.swift`; `RootView` owns the `.task { setupHealthKit() }` call
 - `TabView` with `.toolbar(.hidden, for: .tabBar)` + `.safeAreaInset(edge: .bottom)` reserves space for the custom bar
-- `CustomTabBar` has 5 visual slots (Home | Stats | FAB | History | Profile); FAB uses `.offset(y: -16)` to straddle the bar's top edge
+- `CustomTabBar` has 3 slots: Home | History | Profile — Stats and FAB removed in Phase 3.5 cleanup
 - Tab bar background: `.ultraThinMaterial` with `.ignoresSafeArea(edges: .bottom)` so it covers the home-indicator area
 - Active tab icon uses `"\(icon).fill"` variant in `#135bec`; inactive uses outline in `.secondary`
 
@@ -100,10 +108,10 @@ distinguish them from workout metadata. Current defaults:
 - `GoalCardView`: glass card via `.background(.regularMaterial)` + `RoundedRectangle` stroke border
 - `SegmentedRingView`: `Canvas`-drawn arcs — N segments with **6° gap** between each; completed segments use category colour, pending use `.gray.opacity(0.2)`
 
-#### Stats / History / Profile
-- Stats: total sessions row + per-category `ProgressView` bars; real HK data, `List` presentation
+#### History / Profile
 - History: sorted entry list; each row shows category chip, date/time, duration, HK source badge; `ContentUnavailableView` for empty state
 - Profile: category list (name, target, icon chip) + HK auth status; goal editing wired up in goal-creation flow
+- Stats tab removed in Phase 3.5 cleanup (summary data will move to Home in a later pass)
 
 #### AppState / HealthKit
 - `refreshGoals()` now also populates `entries` (two sequential HK fetches: goals then entries)
@@ -125,21 +133,24 @@ All Phase 3 deliverables shipped:
 - Goal creation flow (AddGoalView sheet with type picker + frequency stepper)
 - Goal deletion (swipe-to-delete in Profile)
 
-### Known issues / deferred to Phase 3.5
-- `.chalkBackground()` is a `View` extension method — never use `Color.chalkBackground` (compile error)
-- No edit-frequency flow for existing goals (can only delete + re-add)
-- Stats/History/Profile use generic `List` presentation — visual polish deferred
-- `ProfileView` has a dead `showingAddGoal` state; Add Goal is only reachable via FAB
+## Phase 3.5 — UI Hardening (post-widget, pre-watch)
+This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tightens up the core UI.
 
-## Phase 3.5 — UI Hardening
-Scope: address feedback, polish UI, fix edge cases before moving to widgets.
-Examples of work that belongs here:
-- Visual polish for Stats, History, Profile screens
-- Edit-frequency flow for existing goals
-- Accessibility / Dynamic Type pass
-- Empty-state improvements
-- Dark mode refinement
-- Any UX issues surfaced during real-device testing
+### Known issues carried forward
+- No edit-frequency flow for existing goals (can only delete + re-add)
+- History/Profile use generic `List` presentation — visual polish deferred
+- `ProfileView` has a dead `showingAddGoal` state; Add Goal only reachable via Profile
+
+### Ideas / backlog
+- **Goal management from Home** — add a way to add/edit/delete goals directly from the home screen (e.g. long-press on a card → context menu, or an "Edit" button in the nav bar) so users never need to go to Profile for this
+- **Edit-frequency flow** — let users change `targetPerWeek` on an existing goal without delete + re-add
+- **Stats surface on Home** — fold the key stats (total sessions this week, streak, etc.) into the Home screen as a header or collapsible section, since the standalone Stats tab was removed
+- **Empty state for Home** — when no goals are configured yet, show an onboarding-style prompt to add the first goal
+- **Pull-to-refresh feedback** — visual confirmation that a refresh completed (e.g. last-updated timestamp below the week range header)
+- **Goal card tap** — tapping a goal card could open a detail view with full entry history for that category
+- **Haptic feedback** — light haptics on tab switch and goal card interactions
+- **Accessibility** — audit VoiceOver labels on `SegmentedRingView` (Canvas-drawn, so needs explicit `accessibilityLabel`)
+- **User-selectable duplicate resolution** — when overlap dedup hides an entry, surface both options in a UI and let the user choose which one to keep (e.g. prefer Nike's active duration vs Strava's elapsed time); hidden entries are already retained in `AppState.entries` to support this
 
 ## Version Control
 - Git is used from day one

@@ -31,7 +31,7 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Strength",
                 icon: "figure.strengthtraining.traditional",
-                colorHex: "#135bec",
+                colorHex: "#79D2B8",
                 targetPerWeek: 4,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue),
@@ -41,7 +41,7 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Running",
                 icon: "figure.run",
-                colorHex: "#ff9500",
+                colorHex: "#FFD275",
                 targetPerWeek: 3,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.running.rawValue)
@@ -50,7 +50,7 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Yoga",
                 icon: "figure.yoga",
-                colorHex: "#af52de",
+                colorHex: "#FC91AD",
                 targetPerWeek: 1,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.yoga.rawValue),
@@ -72,7 +72,7 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Strength",
                 icon: "figure.strengthtraining.traditional",
-                colorHex: "#135bec",
+                colorHex: "#79D2B8",   // Aqua
                 targetPerWeek: 4,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue),
@@ -82,14 +82,14 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Running",
                 icon: "figure.run",
-                colorHex: "#ff9500",
+                colorHex: "#FFD275",   // Topaz
                 targetPerWeek: 3,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.running.rawValue)]
             ),
             WorkoutCategory(
                 name: "Yoga",
                 icon: "figure.yoga",
-                colorHex: "#af52de",
+                colorHex: "#FC91AD",   // Flamingo
                 targetPerWeek: 1,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.yoga.rawValue),
@@ -99,21 +99,21 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Cycling",
                 icon: "figure.outdoor.cycle",
-                colorHex: "#30d158",
+                colorHex: "#72C2E2",   // Aero
                 targetPerWeek: 3,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.cycling.rawValue)]
             ),
             WorkoutCategory(
                 name: "Walking",
                 icon: "figure.walk",
-                colorHex: "#32ade6",
+                colorHex: "#B6C1FF",   // Periwinkle
                 targetPerWeek: 5,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.walking.rawValue)]
             ),
             WorkoutCategory(
                 name: "HIIT",
                 icon: "figure.highintensity.intervaltraining",
-                colorHex: "#ff453a",
+                colorHex: "#9A745F",   // Chestnut
                 targetPerWeek: 2,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.highIntensityIntervalTraining.rawValue)
@@ -122,14 +122,14 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Swimming",
                 icon: "figure.pool.swim",
-                colorHex: "#64d2ff",
+                colorHex: "#72C2E2",   // Aero
                 targetPerWeek: 2,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.swimming.rawValue)]
             ),
             WorkoutCategory(
                 name: "Rowing",
                 icon: "figure.rowing",
-                colorHex: "#ff9f0a",
+                colorHex: "#79D2B8",   // Aqua
                 targetPerWeek: 2,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.rowing.rawValue)]
             ),
@@ -217,12 +217,49 @@ final class HealthKitManager: ObservableObject {
             allEntries.append(contentsOf: entries)
         }
 
-        // Deduplicate by externalId: a workout whose HK activity type satisfies two
-        // entries in activityTypeRawValues (unlikely, but defensive) must not be double-counted.
+        // Pass 1 — deduplicate by externalId: defensive guard against a single HK sample
+        // matching more than one activityType in activityTypeRawValues.
         var seen = Set<UUID>()
-        return allEntries.filter { entry in
+        let deduped = allEntries.filter { entry in
             guard let externalId = entry.externalId else { return true }
             return seen.insert(externalId).inserted
+        }
+
+        // Pass 2 — overlap deduplication: if two workouts of the same category overlap
+        // in time (e.g. a Nike Run Club entry and its Strava mirror), keep only the
+        // longest one and mark the rest isHidden = true.
+        //
+        // Algorithm: sort by start date, sweep through building overlap groups, then
+        // within each group of size > 1 keep the entry with the greatest duration
+        // (ties broken by earliest start date).
+        let sorted = deduped.sorted { $0.date < $1.date }
+        var groups: [[WorkoutEntry]] = []
+        var currentGroup: [WorkoutEntry] = []
+        var groupEndDate = Date.distantPast
+
+        for entry in sorted {
+            let entryEnd = entry.date.addingTimeInterval(entry.duration)
+            if currentGroup.isEmpty || entry.date < groupEndDate {
+                currentGroup.append(entry)
+                if entryEnd > groupEndDate { groupEndDate = entryEnd }
+            } else {
+                groups.append(currentGroup)
+                currentGroup = [entry]
+                groupEndDate = entryEnd
+            }
+        }
+        if !currentGroup.isEmpty { groups.append(currentGroup) }
+
+        return groups.flatMap { group -> [WorkoutEntry] in
+            guard group.count > 1 else { return group }
+            let keeper = group.max { a, b in
+                a.duration == b.duration ? a.date > b.date : a.duration < b.duration
+            }!
+            return group.map { entry in
+                var e = entry
+                e.isHidden = entry.id != keeper.id
+                return e
+            }
         }
     }
 
@@ -245,7 +282,8 @@ final class HealthKitManager: ObservableObject {
                 from: weekInterval.start,
                 to: weekInterval.end
             )
-            goals.append(WeeklyGoal(category: category, completedCount: entries.count))
+            let visibleCount = entries.filter { !$0.isHidden }.count
+            goals.append(WeeklyGoal(category: category, completedCount: visibleCount))
         }
         return goals
     }

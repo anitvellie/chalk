@@ -11,13 +11,13 @@ struct HistoryView: View {
     @EnvironmentObject var appState: AppState
 
     private var sortedEntries: [WorkoutEntry] {
-        appState.entries.sorted { $0.date > $1.date }
+        appState.entries.filter { !$0.isHidden }.sorted { $0.date > $1.date }
     }
 
     var body: some View {
         NavigationStack {
             Group {
-                if appState.entries.isEmpty && !appState.isLoading {
+                if appState.entries.filter({ !$0.isHidden }).isEmpty && !appState.isLoading {
                     ContentUnavailableView(
                         "No Workouts",
                         systemImage: "figure.run.circle",

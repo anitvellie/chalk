@@ -17,13 +17,18 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
 
-                    // Week range subtitle
-                    Text(weekRangeLabel)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 4)
-                        .padding(.bottom, 16)
+                    // Subtitle + week range
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Your week overview")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text(weekRangeLabel)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 4)
+                    .padding(.bottom, 16)
 
                     if appState.isLoading && appState.weeklyGoals.isEmpty {
                         ProgressView()
