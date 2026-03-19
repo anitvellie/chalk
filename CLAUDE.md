@@ -69,6 +69,14 @@ distinguish them from workout metadata. Current defaults:
 - A single `HKWorkoutType` authorisation request covers all activity types; no per-category request needed
 - Background delivery is **implemented** in `HealthKitManager.enableBackgroundDelivery()` but **not yet activated** — wire it up in Phase 4 alongside widget timeline refreshes; requires "Background Delivery" sub-capability in Xcode
 
+### Duplicate workout detection
+- `WorkoutEntry.isHidden: Bool` (default `false`) marks entries suppressed by overlap deduplication
+- Hidden entries are retained in `AppState.entries` for future use but excluded from goal counts and History
+- Dedup runs in `HealthKitManager.fetchWorkouts` as a two-pass process:
+  1. **Pass 1** — externalId dedup (defensive; prevents a single HK sample matching two activity types from being double-counted)
+  2. **Pass 2** — overlap dedup: entries are sorted by start date, grouped into overlapping time windows, and within each group all but the longest are marked `isHidden = true`; ties broken by earliest start date
+- Motivation: cross-app integrations (e.g. Nike Run Club → Strava) create duplicate HK samples for the same workout; since Chalk only tracks *that* a workout happened (not pace/distance), one entry per session is sufficient
+
 ### Persistence
 - **Categories**: JSON-encoded to App Group UserDefaults; falls back to `UserDefaults.standard` when App Group is not yet configured (safe for development before signing is finalised)
 - **WorkoutEntries**: not cached — fetched fresh from HealthKit on every `refreshGoals()` call
@@ -142,7 +150,7 @@ This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tigh
 - **Goal card tap** — tapping a goal card could open a detail view with full entry history for that category
 - **Haptic feedback** — light haptics on tab switch and goal card interactions
 - **Accessibility** — audit VoiceOver labels on `SegmentedRingView` (Canvas-drawn, so needs explicit `accessibilityLabel`)
-- **User-selectable duplicate resolution** — when overlap dedup hides an entry, surface both options and let the user choose which to keep; hidden entries are already retained in `AppState.entries` to support this
+- **User-selectable duplicate resolution** — when overlap dedup hides an entry, surface both options in a UI and let the user choose which one to keep (e.g. prefer Nike's active duration vs Strava's elapsed time); hidden entries are already retained in `AppState.entries` to support this
 
 ## Version Control
 - Git is used from day one

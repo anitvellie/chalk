@@ -32,6 +32,13 @@ struct WorkoutEntry: Identifiable, Codable, Hashable {
     /// `nil` for manually-entered entries.
     var externalId: UUID?
 
+    /// `true` when this entry has been suppressed by overlap deduplication.
+    ///
+    /// Hidden entries are retained in memory so they can be surfaced in future
+    /// UI (e.g. letting the user choose which duplicate to keep), but they are
+    /// excluded from weekly goal counts and the History list.
+    var isHidden: Bool
+
     // MARK: - Init
 
     init(
@@ -40,7 +47,8 @@ struct WorkoutEntry: Identifiable, Codable, Hashable {
         date: Date,
         duration: TimeInterval,
         source: WorkoutSource,
-        externalId: UUID? = nil
+        externalId: UUID? = nil,
+        isHidden: Bool = false
     ) {
         self.id = id
         self.categoryId = categoryId
@@ -48,6 +56,7 @@ struct WorkoutEntry: Identifiable, Codable, Hashable {
         self.duration = duration
         self.source = source
         self.externalId = externalId
+        self.isHidden = isHidden
     }
 }
 
