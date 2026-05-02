@@ -39,7 +39,7 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 - Refer to /Design/ folder for screen mockups (widget, weekly overview, goal creation)
 
 ## Data Model (agreed)
-- `WorkoutCategory`: id, name, icon (SF Symbol name), colorHex (String), targetPerWeek (Int), activityTypeRawValues ([Int])
+- `WorkoutCategory`: id, name, icon (SF Symbol name), targetPerWeek (Int), activityTypeRawValues ([Int])
 - `WorkoutEntry`: id, categoryId (UUID ref), date, duration, source (WorkoutSource enum), externalId (UUID?)
 - `WeeklyGoal`: derived struct — never persisted; computed from WorkoutEntry records for current ISO week
 
@@ -55,7 +55,8 @@ distinguish them from workout metadata. Current defaults:
 ## Decisions Made
 
 ### Data model
-- `WorkoutCategory.colorHex` stored as hex String (e.g. `"#135bec"`) — convert to SwiftUI `Color` via `Color(hex:)` in view layer only
+- `WorkoutCategory` has **no `colorHex` field** — colour is derived entirely in the view layer
+- `WorkoutCategory.displayColor: Color` — app-only view extension in `Chalk/App/WorkoutCategory+Color.swift`; switches on the `icon` SF Symbol string to return a `Color(uiColor:)` system colour for every known workout type; this is the **single source of truth for category colours** used by goal-card rings, weekly strip icons, history chips, and profile chips. Add a new `case` here whenever a new type is added to `categoryLibrary`
 - `WorkoutEntry.categoryId` is a UUID reference, not an embedded object
 - `WorkoutSource` is an enum: `.healthKit` / `.manual`
 - `activityTypeRawValues: [Int]` stores `HKWorkoutActivityType.rawValue` — keeps Models layer free of HealthKit import
@@ -101,7 +102,17 @@ distinguish them from workout metadata. Current defaults:
 - Active tab icon uses `"\(icon).fill"` variant in `#135bec`; inactive uses outline in `.secondary`
 
 #### Home screen
-- 2-column `LazyVGrid` of `GoalCardView`s; week range shown as subtitle below the large nav title
+- Header: "Your week in overview" + week range subtitle
+- `WeeklyActivityStrip` — 7-column horizontal strip showing workout icons for the current week:
+  - Week start derived from `Calendar.current.firstWeekday` (locale-aware, not hardcoded Mon)
+  - Each column: icon(s) top, day letter bottom; `VStack(spacing: 10)` gives 10 pt between bottom of lowest icon and letter
+  - Day text colours: today = `.primary`, past = `#D6D6D6`, future = `#898989`
+  - 0 workouts → date number in icon slot; 1 workout → single icon; 2 workouts → `TwoIconStack` (VStack with negative spacing for overlap — **not** ZStack+offset, which is layout-incorrect); 3+ → `OverflowIconStack` (top 2 by duration + red badge showing total count)
+  - Icons: `"\(category.icon).circle.fill"`, `.resizable()`, `.symbolRenderingMode(.monochrome)`, `.foregroundStyle(category.displayColor.gradient)`, 37 pt frame
+  - `TwoIconStack` uses `VStack(spacing: -13)` so the layout frame genuinely ends at the bottom of the lower icon; a `Color(.systemBackground)` circle (31 pt) sits behind the lower icon to plug the SF Symbol's transparent cutout
+  - `HStack(alignment: .bottom)` in the strip keeps all day letters at the same baseline; multi-icon columns extend upward
+- Divider + "Goal progress" section header below the strip
+- 2-column `LazyVGrid` of `GoalCardView`s
 - `.chalkBackground()` is a `ViewModifier` reading `@Environment(\.colorScheme)` — picks `#f6f6f8` (light) or `#101622` (dark), no UIKit needed
 
 #### Goal card
@@ -170,17 +181,19 @@ Chalk/                              ← git repo root
 │   └── DevelopmentTeam.xcconfig    ← gitignored; set DEVELOPMENT_TEAM here
 ├── Chalk/                          ← iOS app sources
 │   ├── App/
-│   │   ├── ChalkApp.swift          ← @main entry + Color(hex:) + chalkBackground modifier
-│   │   ├── RootView.swift          ← TabView shell + CustomTabBar + Tab enum
-│   │   └── AppState.swift          ← central @MainActor ObservableObject
+│   │   ├── ChalkApp.swift              ← @main entry + Color(hex:) + chalkBackground modifier
+│   │   ├── RootView.swift              ← TabView shell + CustomTabBar + Tab enum
+│   │   ├── AppState.swift              ← central @MainActor ObservableObject
+│   │   └── WorkoutCategory+Color.swift ← displayColor extension; single source of truth for category colours
 │   ├── Models/
 │   │   ├── WorkoutCategory.swift
 │   │   ├── WorkoutEntry.swift      ← includes WorkoutSource enum
 │   │   └── WeeklyGoal.swift        ← includes Calendar.iso8601 extension
 │   ├── Features/
 │   │   ├── Home/
-│   │   │   ├── HomeView.swift      ← 2-col goal card grid + week range header
-│   │   │   └── GoalCardView.swift  ← glass card + SegmentedRingView (Canvas)
+│   │   │   ├── HomeView.swift              ← week overview header + strip + goal card grid
+│   │   │   ├── GoalCardView.swift          ← glass card + ContinuousRingView (Canvas)
+│   │   │   └── WeeklyActivityStrip.swift   ← 7-day workout icon strip
 │   │   ├── Stats/
 │   │   │   └── StatsView.swift     ← total sessions + per-category progress bars
 │   │   ├── History/

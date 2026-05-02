@@ -17,9 +17,9 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
 
-                    // Subtitle + week range
+                    // Header
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Your week overview")
+                        Text("Your week in overview")
                             .font(.headline)
                             .foregroundStyle(.primary)
                         Text(weekRangeLabel)
@@ -28,12 +28,30 @@ struct HomeView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 4)
+                    .padding(.bottom, 20)
+
+                    // Weekly activity strip
+                    WeeklyActivityStrip(
+                        entries: appState.entries,
+                        categories: appState.categories
+                    )
+                    .padding(.horizontal, 16)
                     .padding(.bottom, 16)
+
+                    Divider()
+                        .padding(.horizontal, 16)
+
+                    Text("Goal progress")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)
+                        .padding(.bottom, 16)
 
                     if appState.isLoading && appState.weeklyGoals.isEmpty {
                         ProgressView()
                             .frame(maxWidth: .infinity)
-                            .padding(.top, 80)
+                            .padding(.top, 40)
 
                     } else if appState.weeklyGoals.isEmpty {
                         emptyState

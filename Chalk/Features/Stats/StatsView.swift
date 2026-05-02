@@ -64,7 +64,7 @@ struct StatsView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: goal.category.icon)
-                    .foregroundStyle(Color(hex: goal.category.colorHex))
+                    .foregroundStyle(goal.category.displayColor)
                     .frame(width: 20)
                 Text(goal.category.name)
                     .font(.body.weight(.medium))
@@ -74,7 +74,7 @@ struct StatsView: View {
                     .foregroundStyle(goal.isComplete ? .green : .secondary)
             }
             ProgressView(value: goal.progress)
-                .tint(Color(hex: goal.category.colorHex))
+                .tint(goal.category.displayColor)
         }
         .padding(.vertical, 4)
     }

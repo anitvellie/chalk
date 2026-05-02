@@ -25,6 +25,7 @@ struct RootView: View {
                 .tag(Tab.profile)
         }
         .task {
+            print("[Chalk] setupHealthKit called")
             await appState.setupHealthKit()
         }
     }

@@ -31,7 +31,6 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Strength",
                 icon: "figure.strengthtraining.traditional",
-                colorHex: "#79D2B8",
                 targetPerWeek: 4,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue),
@@ -41,7 +40,6 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Running",
                 icon: "figure.run",
-                colorHex: "#FFD275",
                 targetPerWeek: 3,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.running.rawValue)
@@ -50,7 +48,6 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Yoga",
                 icon: "figure.yoga",
-                colorHex: "#FC91AD",
                 targetPerWeek: 1,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.yoga.rawValue),
@@ -72,7 +69,6 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Strength",
                 icon: "figure.strengthtraining.traditional",
-                colorHex: "#79D2B8",   // Aqua
                 targetPerWeek: 4,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue),
@@ -82,14 +78,12 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Running",
                 icon: "figure.run",
-                colorHex: "#FFD275",   // Topaz
                 targetPerWeek: 3,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.running.rawValue)]
             ),
             WorkoutCategory(
                 name: "Yoga",
                 icon: "figure.yoga",
-                colorHex: "#FC91AD",   // Flamingo
                 targetPerWeek: 1,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.yoga.rawValue),
@@ -99,21 +93,18 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Cycling",
                 icon: "figure.outdoor.cycle",
-                colorHex: "#72C2E2",   // Aero
                 targetPerWeek: 3,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.cycling.rawValue)]
             ),
             WorkoutCategory(
                 name: "Walking",
                 icon: "figure.walk",
-                colorHex: "#B6C1FF",   // Periwinkle
                 targetPerWeek: 5,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.walking.rawValue)]
             ),
             WorkoutCategory(
                 name: "HIIT",
                 icon: "figure.highintensity.intervaltraining",
-                colorHex: "#9A745F",   // Chestnut
                 targetPerWeek: 2,
                 activityTypeRawValues: [
                     Int(HKWorkoutActivityType.highIntensityIntervalTraining.rawValue)
@@ -122,14 +113,12 @@ final class HealthKitManager: ObservableObject {
             WorkoutCategory(
                 name: "Swimming",
                 icon: "figure.pool.swim",
-                colorHex: "#72C2E2",   // Aero
                 targetPerWeek: 2,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.swimming.rawValue)]
             ),
             WorkoutCategory(
                 name: "Rowing",
                 icon: "figure.rowing",
-                colorHex: "#79D2B8",   // Aqua
                 targetPerWeek: 2,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.rowing.rawValue)]
             ),

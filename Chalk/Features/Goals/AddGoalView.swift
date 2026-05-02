@@ -73,7 +73,7 @@ struct AddGoalView: View {
 
                             FrequencyCard(
                                 targetPerWeek: $targetPerWeek,
-                                accentColor: Color(hex: template.colorHex)
+                                accentColor: template.displayColor
                             )
                         }
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
@@ -162,7 +162,7 @@ private struct WorkoutTypeTile: View {
     let isSelected: Bool
     let onTap: () -> Void
 
-    private var categoryColor: Color { Color(hex: template.colorHex) }
+    private var categoryColor: Color { template.displayColor }
 
     var body: some View {
         Button(action: onTap) {

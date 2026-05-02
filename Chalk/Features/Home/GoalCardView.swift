@@ -9,7 +9,7 @@ struct GoalCardView: View {
 
     let goal: WeeklyGoal
 
-    private var categoryColor: Color { Color(hex: goal.category.colorHex) }
+    private var categoryColor: Color { goal.category.displayColor }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

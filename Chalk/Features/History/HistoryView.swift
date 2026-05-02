@@ -48,9 +48,9 @@ struct HistoryView: View {
             Group {
                 if let cat = category {
                     Image(systemName: cat.icon)
-                        .foregroundStyle(Color(hex: cat.colorHex))
+                        .foregroundStyle(cat.displayColor)
                         .frame(width: 36, height: 36)
-                        .background(Color(hex: cat.colorHex).opacity(0.12))
+                        .background(cat.displayColor.opacity(0.12))
                 } else {
                     Image(systemName: "figure.mixed.cardio")
                         .foregroundStyle(.secondary)

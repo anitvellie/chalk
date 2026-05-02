@@ -43,13 +43,6 @@ extension Color {
         )
     }
 
-    // MARK: - Ring colour palette
-    static let ringAqua       = Color(hex: "#79D2B8")
-    static let ringAero       = Color(hex: "#72C2E2")
-    static let ringTopaz      = Color(hex: "#FFD275")
-    static let ringFlamingo   = Color(hex: "#FC91AD")
-    static let ringPeriwinkle = Color(hex: "#B6C1FF")
-    static let ringChestnut   = Color(hex: "#9A745F")
 }
 
 // MARK: - Adaptive Background

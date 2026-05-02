@@ -58,9 +58,9 @@ struct ProfileView: View {
         HStack(spacing: 12) {
             Image(systemName: category.icon)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Color(hex: category.colorHex))
+                .foregroundStyle(category.displayColor)
                 .frame(width: 32, height: 32)
-                .background(Color(hex: category.colorHex).opacity(0.12))
+                .background(category.displayColor.opacity(0.12))
                 .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
 
             VStack(alignment: .leading, spacing: 2) {
