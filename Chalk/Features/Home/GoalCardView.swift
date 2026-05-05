@@ -55,7 +55,7 @@ struct GoalCardView: View {
 
 // MARK: - Glass Card Modifier
 
-private struct GlassCardModifier: ViewModifier {
+struct GlassCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26, *) {
             content

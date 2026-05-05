@@ -48,6 +48,9 @@ struct WeeklyActivityStrip: View {
                 )
             }
         }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 20)
+        .modifier(GlassCardModifier())
     }
 }
 
