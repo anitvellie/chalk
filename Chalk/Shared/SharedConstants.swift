@@ -20,9 +20,7 @@ enum SharedConstants {
 
     /// Identifier for the shared App Group container.
     ///
-    /// ⚠️  Replace `com.placeholder.Chalk` with your real bundle ID prefix
-    ///     and register this group ID in the Apple Developer portal.
-    static let appGroupIdentifier = "group.com.placeholder.Chalk"
+    static let appGroupIdentifier = "group.com.chalkweekly.app"
 
     // MARK: - Shared UserDefaults
 

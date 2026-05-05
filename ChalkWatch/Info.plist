@@ -21,6 +21,6 @@
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.placeholder.Chalk</string>
+	<string>com.chalkweekly.app</string>
 </dict>
 </plist>
