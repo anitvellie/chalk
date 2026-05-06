@@ -85,7 +85,8 @@ distinguish them from workout metadata. Current defaults:
 
 ### Project generation
 - `project.yml` (xcodegen 2.25) is the source of truth for the Xcode project
-- **Always edit `project.yml`, then run `xcodegen generate`** — never edit `.xcodeproj` directly
+- **Always edit `project.yml`, then run `./regen.sh`** — never edit `.xcodeproj` directly, and never run `xcodegen generate` directly
+- `regen.sh` wraps `xcodegen generate` and automatically re-applies the manual pbxproj patches for `chalk_app_icon.icon` (xcodegen 2.25 cannot model `folder.iconcomposer.icon`, so the Icon Composer file must be wired in via stable GUIDs after every regeneration)
 - Entitlements are declared in `project.yml` under `entitlements.properties` — editing `.entitlements` files directly is pointless because xcodegen overwrites them on every regeneration
 - DEVELOPMENT_TEAM lives in `Config/DevelopmentTeam.xcconfig` (gitignored) — see `Config/DevelopmentTeam.xcconfig.example`
 
