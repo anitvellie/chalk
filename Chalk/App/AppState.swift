@@ -30,6 +30,11 @@ final class AppState: ObservableObject {
     /// Non-nil when a recoverable error should be surfaced to the user.
     @Published var errorMessage: String? = nil
 
+    #if DEBUG
+    /// Whether mock data is currently overriding live HealthKit data.
+    @Published var isMockActive: Bool = false
+    #endif
+
     // MARK: - Dependencies
 
     private let healthKitManager = HealthKitManager()
@@ -69,6 +74,9 @@ final class AppState: ObservableObject {
     ///
     /// Safe to call from a pull-to-refresh control or after a new category is added.
     func refreshGoals() async {
+        #if DEBUG
+        guard !isMockActive else { return }
+        #endif
         guard healthKitAuthorized else { return }
         isLoading = true
         defer { isLoading = false }
@@ -80,6 +88,28 @@ final class AppState: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+
+    // MARK: - Mock Data (DEBUG only)
+
+    #if DEBUG
+    /// Replaces live HealthKit data with synthetic entries and recomputes goals.
+    func applyMock(entries: [WorkoutEntry]) {
+        isMockActive = true
+        self.entries = entries
+        weeklyGoals = categories.map { WeeklyGoal.compute(for: $0, from: entries) }
+    }
+
+    /// Clears mock data and restores live HealthKit data (or zero-counts on Simulator).
+    func clearMock() async {
+        isMockActive = false
+        entries = []
+        if healthKitAuthorized {
+            await refreshGoals()
+        } else {
+            weeklyGoals = categories.map { WeeklyGoal(category: $0, completedCount: 0) }
+        }
+    }
+    #endif
 
     // MARK: - Persistence (categories only)
 

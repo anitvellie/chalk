@@ -29,6 +29,28 @@ struct ProfileView: View {
                     }
                 }
 
+                // ── Developer ──
+                #if DEBUG
+                Section("Developer") {
+                    NavigationLink(destination: MockDataView()) {
+                        Label {
+                            HStack {
+                                Text("Mock Data")
+                                if appState.isMockActive {
+                                    Spacer()
+                                    Text("Active")
+                                        .font(.caption.weight(.medium))
+                                        .foregroundStyle(.orange)
+                                }
+                            }
+                        } icon: {
+                            Image(systemName: "flask.fill")
+                                .foregroundStyle(.orange)
+                        }
+                    }
+                }
+                #endif
+
                 // ── Permissions ──
                 Section("Permissions") {
                     HStack {
