@@ -15,7 +15,7 @@ import sys, pathlib
 path = pathlib.Path(sys.argv[1])
 src = path.read_text()
 
-FILE_REF = '\t\tAA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = chalk_app_icon.icon; sourceTree = "<group>"; };'
+FILE_REF = '\t\tAA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Chalk/chalk_app_icon.icon; sourceTree = SOURCE_ROOT; };'
 BUILD_FILE_IOS   = '\t\tCC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };'
 BUILD_FILE_WATCH = '\t\tDD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };'
 
