@@ -77,6 +77,11 @@ targets:
           - "Widgets/**"
           - "Design/**"
           - "**/.gitkeep"
+          # xcodegen 2.25 does not know folder.iconcomposer.icon (Xcode 26 type).
+          # chalk_app_icon.icon is manually referenced in the pbxproj as a Resource.
+          # Re-add via Xcode's + button after any xcodegen regeneration.
+          - "chalk_app_icon.icon"
+          - "chalk_app_icon.icon/**"
     entitlements:
       path: Chalk/Chalk.entitlements
       properties:
@@ -96,7 +101,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chalkweekly.app
         TARGETED_DEVICE_FAMILY: "1"
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_APPICON_NAME: chalk_app_icon
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
     dependencies:
       - target: ChalkWidgetExtension
