@@ -22,6 +22,8 @@
 	<string>1</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Chalk reads your workout history to track your weekly goals.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Chalk does not write any health data.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

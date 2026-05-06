@@ -97,6 +97,7 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         NSHealthShareUsageDescription: "Chalk reads your workout history to track your weekly goals."
+        NSHealthUpdateUsageDescription: "Chalk does not write any health data."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chalkweekly.app
@@ -162,6 +163,8 @@ targets:
         CFBundleName: Chalk
         WKApplication: true
         WKCompanionAppBundleIdentifier: com.chalkweekly.app
+        NSHealthShareUsageDescription: "Chalk reads your workout history to track your weekly goals."
+        NSHealthUpdateUsageDescription: "Chalk does not write any health data."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chalkweekly.app.watchkitapp
