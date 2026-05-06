@@ -168,4 +168,5 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chalkweekly.app.watchkitapp
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_APPICON_NAME: chalk_app_icon
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES

@@ -174,6 +174,7 @@
 			children = (
 				871B0D601CAFFDC4967012FB /* Assets.xcassets */,
 				90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */,
+				AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */,
 				FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */,
 				85189A9997D171E3E7757A20 /* Info.plist */,
 			);
@@ -582,7 +583,8 @@
 		9EB64D5B662A6B96F959FC51 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = chalk_app_icon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ChalkWatch/ChalkWatch.entitlements;
 				INFOPLIST_FILE = ChalkWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chalkweekly.app.watchkitapp;
@@ -616,7 +618,8 @@
 		CFBDF6E25E07CB51D9C676D8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = chalk_app_icon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ChalkWatch/ChalkWatch.entitlements;
 				INFOPLIST_FILE = ChalkWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chalkweekly.app.watchkitapp;
