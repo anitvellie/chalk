@@ -135,6 +135,7 @@ targets:
       path: Chalk/Widgets/ChalkWidgetExtension/Info.plist
       properties:
         CFBundleName: ChalkWidget
+        CFBundleDisplayName: Chalk
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:

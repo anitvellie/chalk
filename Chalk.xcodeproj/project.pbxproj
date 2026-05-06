@@ -16,8 +16,6 @@
 		3278B5BB384191F27BC87BEE /* WorkoutCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A638B411D672AD02302874C /* WorkoutCategory.swift */; };
 		3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		39E8F6EA15A0388675697DDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4653102AB269C5F14198ED2 /* Assets.xcassets */; };
-		CC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
-		DD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
 		493A85FC55643523AFA99A28 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCA6A536DAA2D56D041F113 /* HomeView.swift */; };
 		504C91E730C6A2D5BE4C804A /* WeeklyActivityStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26090F98CE73253C07B1BC6 /* WeeklyActivityStrip.swift */; };
 		58F3912B04F2D4C8E6228923 /* ChalkWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -34,6 +32,8 @@
 		DC16BAE2D18FBF895E3DEA9D /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1873FB10790F679E6A5D4F /* AddGoalView.swift */; };
 		EAD788E2DD1AF9687D049C91 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */; };
+		CC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
+		DD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,8 +110,8 @@
 		CFCA6A536DAA2D56D041F113 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		EB1873FB10790F679E6A5D4F /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		F4653102AB269C5F14198ED2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = chalk_app_icon.icon; sourceTree = "<group>"; };
 		FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWatchApp.swift; sourceTree = "<group>"; };
+		AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = chalk_app_icon.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -173,8 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				871B0D601CAFFDC4967012FB /* Assets.xcassets */,
-				90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */,
 				AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */,
+				90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */,
 				FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */,
 				85189A9997D171E3E7757A20 /* Info.plist */,
 			);
