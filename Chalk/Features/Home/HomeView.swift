@@ -8,6 +8,23 @@ import SwiftUI
 
 struct HomeView: View {
 
+    private struct Constants {
+        static let appName = "Chalk"
+        static let weekOverview = "Your week in overview"
+        static let goalProgress = "Goal progress"
+        static let noGoals = "No goals yet"
+        static let healthKitAccessError = "HealthKit isn't available on this device."
+        static let weekOf = "Week of"
+        static let weekOfFallback = "This week"
+        static let dateFormatWeek = "MMM d"
+        static let dumbellIcon = "dumbbell.fill"
+        static let dumbellIconColour = "#135bec"
+        static let dumbellIconSize: CGFloat = 48
+        static let horizonalPadding: CGFloat = 16
+        static let bottomPadding: CGFloat = 16
+        static let bottomPaddingIncreased: CGFloat = 20
+    }
+
     @EnvironmentObject var appState: AppState
 
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -19,34 +36,31 @@ struct HomeView: View {
 
                     // Header
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Your week in overview")
+                        Text(Constants.weekOverview)
                             .font(.headline)
                             .foregroundStyle(.primary)
                         Text(weekRangeLabel)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, Constants.horizonalPadding)
                     .padding(.top, 4)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, Constants.bottomPaddingIncreased)
 
                     // Weekly activity strip
                     WeeklyActivityStrip(
                         entries: appState.entries,
                         categories: appState.categories
                     )
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
+                    .padding(.horizontal, Constants.horizonalPadding)
+                    .padding(.bottom, Constants.bottomPadding)
 
-                    Divider()
-                        .padding(.horizontal, 16)
-
-                    Text("Goal progress")
+                    Text(Constants.goalProgress)
                         .font(.headline)
                         .foregroundStyle(.primary)
-                        .padding(.horizontal, 16)
+                        .padding(.horizontal, Constants.horizonalPadding)
                         .padding(.top, 12)
-                        .padding(.bottom, 16)
+                        .padding(.bottom, Constants.bottomPadding)
 
                     if appState.isLoading && appState.weeklyGoals.isEmpty {
                         ProgressView()
@@ -57,20 +71,20 @@ struct HomeView: View {
                         emptyState
 
                     } else {
-                        LazyVGrid(columns: columns, spacing: 16) {
+                        LazyVGrid(columns: columns, spacing: Constants.horizonalPadding) {
                             ForEach(appState.weeklyGoals) { goal in
                                 GoalCardView(goal: goal)
                             }
                         }
-                        .padding(.horizontal, 16)
+                        .padding(.horizontal, Constants.horizonalPadding)
                         .padding(.bottom, 24)
                     }
                 }
             }
-            .scrollBounceBehavior(.basedOnSize)
+            .scrollBounceBehavior(.always)
             .refreshable { await appState.refreshGoals() }
             .chalkBackground()
-            .navigationTitle("Chalk")
+            .navigationTitle(Constants.appName)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if appState.isLoading {
@@ -91,14 +105,14 @@ struct HomeView: View {
     // MARK: - Sub-views
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "dumbbell.fill")
-                .font(.system(size: 48))
-                .foregroundStyle(Color(hex: "#135bec"))
-            Text("No goals yet")
+        VStack(spacing: Constants.horizonalPadding) {
+            Image(systemName: Constants.dumbellIcon)
+                .font(.system(size: Constants.dumbellIconSize))
+                .foregroundStyle(Color(hex: Constants.dumbellIconColour))
+            Text(Constants.noGoals)
                 .font(.headline)
             if !HealthKitManager.isAvailable {
-                Text("HealthKit isn't available on this device.")
+                Text(Constants.healthKitAccessError)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -112,7 +126,7 @@ struct HomeView: View {
         Text(message)
             .font(.caption)
             .foregroundStyle(.white)
-            .padding(.horizontal, 16)
+            .padding(.horizontal, Constants.horizonalPadding)
             .padding(.vertical, 10)
             .background(Color.red.opacity(0.85), in: RoundedRectangle(cornerRadius: 10))
     }
@@ -122,12 +136,12 @@ struct HomeView: View {
     private var weekRangeLabel: String {
         let cal = Calendar.iso8601
         guard let interval = cal.dateInterval(of: .weekOfYear, for: Date()) else {
-            return "This Week"
+            return Constants.weekOfFallback
         }
         let fmt = DateFormatter()
-        fmt.dateFormat = "MMM d"
+        fmt.dateFormat = Constants.dateFormatWeek
         let start = fmt.string(from: interval.start)
         let end   = fmt.string(from: interval.end.addingTimeInterval(-1))
-        return "Week of \(start) – \(end)"
+        return "\(Constants.weekOf) \(start) – \(end)"
     }
 }
