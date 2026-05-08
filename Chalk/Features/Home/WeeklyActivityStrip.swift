@@ -162,7 +162,7 @@ private struct OverflowIconStack: View {
         TwoIconStack(top: top, bottom: bottom)
             .overlay(alignment: .topTrailing) {
                 ZStack {
-                    Circle().fill(Color.red)
+                    Circle().fill(Color.red.opacity(1.0))
                     Text("\(totalCount)")
                         .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(.white)
