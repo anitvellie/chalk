@@ -13,6 +13,7 @@
 		25CB557B1A68044FE201EC31 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DE07972FE885C4C9F560F /* ProfileView.swift */; };
 		264EB195993937894AE49E50 /* ChalkWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890CFC29F19A7AA049E3A376 /* ChalkWidgetExtension.swift */; };
 		272CC2B8398F95466EB6A27D /* ChalkWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */; };
+		295F8CE1085110773D6050B9 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EC88D635EDBEF88E4DF592 /* OnboardingView.swift */; };
 		3278B5BB384191F27BC87BEE /* WorkoutCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A638B411D672AD02302874C /* WorkoutCategory.swift */; };
 		3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		39E8F6EA15A0388675697DDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4653102AB269C5F14198ED2 /* Assets.xcassets */; };
@@ -99,6 +100,7 @@
 		8A2F0EE1093E98C8172DC4F3 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChalkWatch.entitlements; sourceTree = "<group>"; };
 		98F12DA7CE371E02E20D1218 /* Chalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chalk.entitlements; sourceTree = "<group>"; };
+		A0EC88D635EDBEF88E4DF592 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		B26090F98CE73253C07B1BC6 /* WeeklyActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyActivityStrip.swift; sourceTree = "<group>"; };
 		B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
 		BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
@@ -115,6 +117,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		1134F55607E011D0B09BCC8D /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A0EC88D635EDBEF88E4DF592 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		12A67FA2B32A5358C9C26BBD = {
 			isa = PBXGroup;
 			children = (
@@ -239,6 +249,7 @@
 				51EF0F1F5A3CF90A185ABBC3 /* Goals */,
 				76FCF8B9F0797928DE0296B7 /* History */,
 				24D6DD5EEEA912EF53A77E97 /* Home */,
+				1134F55607E011D0B09BCC8D /* Onboarding */,
 				FDCB44174F571AD9AE3EE42D /* Profile */,
 				531CA4F80E8218C3CA8D441A /* Stats */,
 			);
@@ -431,6 +442,7 @@
 				493A85FC55643523AFA99A28 /* HomeView.swift in Sources */,
 				A5FE3B26D2A66263EB74B396 /* MockDataManager.swift in Sources */,
 				D5195807981FAA7C25B9C268 /* MockDataView.swift in Sources */,
+				295F8CE1085110773D6050B9 /* OnboardingView.swift in Sources */,
 				25CB557B1A68044FE201EC31 /* ProfileView.swift in Sources */,
 				9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */,
 				3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */,

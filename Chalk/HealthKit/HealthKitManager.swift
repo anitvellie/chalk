@@ -118,7 +118,7 @@ final class HealthKitManager: ObservableObject {
             ),
             WorkoutCategory(
                 name: "Rowing",
-                icon: "figure.rowing",
+                icon: "figure.indoor.rowing",
                 targetPerWeek: 2,
                 activityTypeRawValues: [Int(HKWorkoutActivityType.rowing.rawValue)]
             ),

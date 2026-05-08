@@ -10,8 +10,13 @@ struct ChalkApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environmentObject(appState)
+            if appState.hasCompletedOnboarding {
+                RootView()
+                    .environmentObject(appState)
+            } else {
+                OnboardingView()
+                    .environmentObject(appState)
+            }
         }
     }
 }

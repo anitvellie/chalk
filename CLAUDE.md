@@ -9,7 +9,7 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 - Phase 1: ✅ Complete
 - Phase 2: ✅ Complete
 - Phase 3: ✅ Complete
-- Phase 3.5: Upcoming (UI hardening + feedback)
+- Phase 3.5: 🚧 In progress (UI hardening + feedback)
 
 ## Phases
 - [x] Phase 1 — Project scaffold, data models, target setup
@@ -57,6 +57,7 @@ distinguish them from workout metadata. Current defaults:
 ### Data model
 - `WorkoutCategory` has **no `colorHex` field** — colour is derived entirely in the view layer
 - `WorkoutCategory.displayColor: Color` — app-only view extension in `Chalk/App/WorkoutCategory+Color.swift`; switches on the `icon` SF Symbol string to return a `Color(uiColor:)` system colour for every known workout type; this is the **single source of truth for category colours** used by goal-card rings, weekly strip icons, history chips, and profile chips. Add a new `case` here whenever a new type is added to `categoryLibrary`
+- Rowing icon is `figure.indoor.rowing` (not `figure.rowing` — that symbol does not exist in SF Symbols)
 - `WorkoutEntry.categoryId` is a UUID reference, not an embedded object
 - `WorkoutSource` is an enum: `.healthKit` / `.manual`
 - `activityTypeRawValues: [Int]` stores `HKWorkoutActivityType.rawValue` — keeps Models layer free of HealthKit import
@@ -148,6 +149,9 @@ All Phase 3 deliverables shipped:
 ## Phase 3.5 — UI Hardening (post-widget, pre-watch)
 This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tightens up the core UI.
 
+### Shipped in 3.5
+- **Onboarding flow** — `Chalk/Features/Onboarding/OnboardingView.swift`; two-page TabView (`.page` style) gated by `AppState.hasCompletedOnboarding` (UserDefaults `"hasCompletedOnboarding"` key); page 1 has three floating goal cards with independent sine-wave animation via `TimelineView`; page 2 has two floating weekly strip cards with mock workout data; `AppState.completeOnboarding()` flips the flag and SwiftUI transitions to `RootView`, which fires `setupHealthKit()` as usual
+
 ### Known issues carried forward
 - No edit-frequency flow for existing goals (can only delete + re-add)
 - History/Profile use generic `List` presentation — visual polish deferred
@@ -201,8 +205,10 @@ Chalk/                              ← git repo root
 │   │   │   └── HistoryView.swift   ← sorted entry list with category chip + duration
 │   │   ├── Profile/
 │   │   │   └── ProfileView.swift   ← category list + HK auth status
-│   │   └── Goals/
-│   │       └── AddGoalView.swift   ← type picker grid + frequency stepper sheet
+│   │   ├── Goals/
+│   │   │   └── AddGoalView.swift   ← type picker grid + frequency stepper sheet
+│   │   └── Onboarding/
+│   │       └── OnboardingView.swift ← two-page first-launch flow; floating cards + floating weekly strips
 │   ├── HealthKit/
 │   │   └── HealthKitManager.swift  ← sole HealthKit importer; includes defaultCategories seed data
 │   ├── Shared/

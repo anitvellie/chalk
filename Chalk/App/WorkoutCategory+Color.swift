@@ -30,7 +30,7 @@ extension WorkoutCategory {
             return Color(uiColor: .systemYellow)
         case "figure.pool.swim":
             return Color(uiColor: .systemTeal)
-        case "figure.rowing":
+        case "figure.indoor.rowing":
             return Color(uiColor: .systemIndigo)
         default:
             return Color(uiColor: .systemPurple)

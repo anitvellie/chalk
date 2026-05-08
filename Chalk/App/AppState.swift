@@ -30,6 +30,9 @@ final class AppState: ObservableObject {
     /// Non-nil when a recoverable error should be surfaced to the user.
     @Published var errorMessage: String? = nil
 
+    /// `true` once the user has completed the first-launch onboarding flow.
+    @Published var hasCompletedOnboarding: Bool
+
     #if DEBUG
     /// Whether mock data is currently overriding live HealthKit data.
     @Published var isMockActive: Bool = false
@@ -42,6 +45,7 @@ final class AppState: ObservableObject {
     // MARK: - Init
 
     init() {
+        hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
         loadCategories()
     }
 
@@ -133,6 +137,13 @@ final class AppState: ObservableObject {
         if let data = try? JSONEncoder().encode(categories) {
             store.set(data, forKey: "categories")
         }
+    }
+
+    // MARK: - Onboarding
+
+    func completeOnboarding() {
+        hasCompletedOnboarding = true
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
     }
 
     // MARK: - Category Management
