@@ -59,69 +59,83 @@ final class HealthKitManager: ObservableObject {
 
     // MARK: - Category Library (full picker catalog)
 
-    /// Complete catalog of every workout type Chalk can track.
+    /// Complete catalog of every HealthKit workout type Chalk can track, sorted alphabetically.
     ///
-    /// Evaluated once (lazy `static let`), giving each template a stable UUID so the
-    /// `AddGoalView` grid can rely on identity-based selection across renders.
-    /// `defaultCategories` is a subset of this library (first 3 entries).
+    /// Each template has a stable UUID (lazy static) so GoalSetupView can rely on
+    /// identity-based rendering across redraws. One entry per distinct HK activity type
+    /// (Yoga bundles yoga + mindAndBody since they're indistinguishable in practice;
+    /// Strength covers traditionalStrengthTraining only — Functional Strength is separate).
     static let categoryLibrary: [WorkoutCategory] = {
         [
-            WorkoutCategory(
-                name: "Strength",
-                icon: "figure.strengthtraining.traditional",
-                targetPerWeek: 4,
-                activityTypeRawValues: [
-                    Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue),
-                    Int(HKWorkoutActivityType.functionalStrengthTraining.rawValue)
-                ]
-            ),
-            WorkoutCategory(
-                name: "Running",
-                icon: "figure.run",
-                targetPerWeek: 3,
-                activityTypeRawValues: [Int(HKWorkoutActivityType.running.rawValue)]
-            ),
-            WorkoutCategory(
-                name: "Yoga",
-                icon: "figure.yoga",
-                targetPerWeek: 1,
-                activityTypeRawValues: [
-                    Int(HKWorkoutActivityType.yoga.rawValue),
-                    Int(HKWorkoutActivityType.mindAndBody.rawValue)
-                ]
-            ),
-            WorkoutCategory(
-                name: "Cycling",
-                icon: "figure.outdoor.cycle",
-                targetPerWeek: 3,
-                activityTypeRawValues: [Int(HKWorkoutActivityType.cycling.rawValue)]
-            ),
-            WorkoutCategory(
-                name: "Walking",
-                icon: "figure.walk",
-                targetPerWeek: 5,
-                activityTypeRawValues: [Int(HKWorkoutActivityType.walking.rawValue)]
-            ),
-            WorkoutCategory(
-                name: "HIIT",
-                icon: "figure.highintensity.intervaltraining",
-                targetPerWeek: 2,
-                activityTypeRawValues: [
-                    Int(HKWorkoutActivityType.highIntensityIntervalTraining.rawValue)
-                ]
-            ),
-            WorkoutCategory(
-                name: "Swimming",
-                icon: "figure.pool.swim",
-                targetPerWeek: 2,
-                activityTypeRawValues: [Int(HKWorkoutActivityType.swimming.rawValue)]
-            ),
-            WorkoutCategory(
-                name: "Rowing",
-                icon: "figure.indoor.rowing",
-                targetPerWeek: 2,
-                activityTypeRawValues: [Int(HKWorkoutActivityType.rowing.rawValue)]
-            ),
+            WorkoutCategory(name: "American Football", icon: "figure.american.football",   targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.americanFootball.rawValue)]),
+            WorkoutCategory(name: "Archery",           icon: "figure.archery",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.archery.rawValue)]),
+            WorkoutCategory(name: "Aus. Football",     icon: "figure.australian.football", targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.australianFootball.rawValue)]),
+            WorkoutCategory(name: "Badminton",         icon: "figure.badminton",           targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.badminton.rawValue)]),
+            WorkoutCategory(name: "Barre",             icon: "figure.barre",               targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.barre.rawValue)]),
+            WorkoutCategory(name: "Baseball",          icon: "figure.baseball",            targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.baseball.rawValue)]),
+            WorkoutCategory(name: "Basketball",        icon: "figure.basketball",          targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.basketball.rawValue)]),
+            WorkoutCategory(name: "Bowling",           icon: "figure.bowling",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.bowling.rawValue)]),
+            WorkoutCategory(name: "Boxing",            icon: "figure.boxing",              targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.boxing.rawValue)]),
+            WorkoutCategory(name: "Climbing",          icon: "figure.climbing",            targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.climbing.rawValue)]),
+            WorkoutCategory(name: "Cooldown",          icon: "figure.cooldown",            targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.cooldown.rawValue)]),
+            WorkoutCategory(name: "Core Training",     icon: "figure.core.training",       targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.coreTraining.rawValue)]),
+            WorkoutCategory(name: "Cricket",           icon: "figure.cricket",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.cricket.rawValue)]),
+            WorkoutCategory(name: "Cross Training",    icon: "figure.cross.training",      targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.crossTraining.rawValue)]),
+            WorkoutCategory(name: "Cross-Country Ski", icon: "figure.skiing.crosscountry", targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.crossCountrySkiing.rawValue)]),
+            WorkoutCategory(name: "Curling",           icon: "figure.curling",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.curling.rawValue)]),
+            WorkoutCategory(name: "Cycling",           icon: "figure.outdoor.cycle",       targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.cycling.rawValue)]),
+            WorkoutCategory(name: "Dance",             icon: "figure.dance",               targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.dance.rawValue)]),
+            WorkoutCategory(name: "Disc Sports",       icon: "figure.disc.sports",         targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.discSports.rawValue)]),
+            WorkoutCategory(name: "Downhill Skiing",   icon: "figure.skiing.downhill",     targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.downhillSkiing.rawValue)]),
+            WorkoutCategory(name: "Elliptical",        icon: "figure.elliptical",          targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.elliptical.rawValue)]),
+            WorkoutCategory(name: "Equestrian",        icon: "figure.equestrian.sports",   targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.equestrianSports.rawValue)]),
+            WorkoutCategory(name: "Fencing",           icon: "figure.fencing",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.fencing.rawValue)]),
+            WorkoutCategory(name: "Fishing",           icon: "figure.fishing",             targetPerWeek: 1, activityTypeRawValues: [Int(HKWorkoutActivityType.fishing.rawValue)]),
+            WorkoutCategory(name: "Flexibility",       icon: "figure.flexibility",         targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.flexibility.rawValue)]),
+            WorkoutCategory(name: "Functional Strength", icon: "figure.strengthtraining.functional", targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.functionalStrengthTraining.rawValue)]),
+            WorkoutCategory(name: "Golf",              icon: "figure.golf",                targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.golf.rawValue)]),
+            WorkoutCategory(name: "Gymnastics",        icon: "figure.gymnastics",          targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.gymnastics.rawValue)]),
+            WorkoutCategory(name: "Hand Cycling",      icon: "figure.hand.cycling",        targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.handCycling.rawValue)]),
+            WorkoutCategory(name: "Handball",          icon: "figure.handball",            targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.handball.rawValue)]),
+            WorkoutCategory(name: "HIIT",              icon: "figure.highintensity.intervaltraining", targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.highIntensityIntervalTraining.rawValue)]),
+            WorkoutCategory(name: "Hiking",            icon: "figure.hiking",              targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.hiking.rawValue)]),
+            WorkoutCategory(name: "Hockey",            icon: "figure.hockey",              targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.hockey.rawValue)]),
+            WorkoutCategory(name: "Hunting",           icon: "figure.hunting",             targetPerWeek: 1, activityTypeRawValues: [Int(HKWorkoutActivityType.hunting.rawValue)]),
+            WorkoutCategory(name: "Jump Rope",         icon: "figure.jumprope",            targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.jumpRope.rawValue)]),
+            WorkoutCategory(name: "Kickboxing",        icon: "figure.kickboxing",          targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.kickboxing.rawValue)]),
+            WorkoutCategory(name: "Lacrosse",          icon: "figure.lacrosse",            targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.lacrosse.rawValue)]),
+            WorkoutCategory(name: "Martial Arts",      icon: "figure.martial.arts",        targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.martialArts.rawValue)]),
+            WorkoutCategory(name: "Mixed Cardio",      icon: "figure.mixed.cardio",        targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.mixedCardio.rawValue)]),
+            WorkoutCategory(name: "Pickleball",        icon: "figure.pickleball",          targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.pickleball.rawValue)]),
+            WorkoutCategory(name: "Pilates",           icon: "figure.pilates",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.pilates.rawValue)]),
+            WorkoutCategory(name: "Racquetball",       icon: "figure.racquetball",         targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.racquetball.rawValue)]),
+            WorkoutCategory(name: "Rowing",            icon: "figure.indoor.rowing",       targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.rowing.rawValue)]),
+            WorkoutCategory(name: "Rugby",             icon: "figure.rugby",               targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.rugby.rawValue)]),
+            WorkoutCategory(name: "Running",           icon: "figure.run",                 targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.running.rawValue)]),
+            WorkoutCategory(name: "Sailing",           icon: "figure.sailing",             targetPerWeek: 1, activityTypeRawValues: [Int(HKWorkoutActivityType.sailing.rawValue)]),
+            WorkoutCategory(name: "Skating",           icon: "figure.skating",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.skatingSports.rawValue)]),
+            WorkoutCategory(name: "Snowboarding",      icon: "figure.snowboarding",        targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.snowboarding.rawValue)]),
+            WorkoutCategory(name: "Soccer",            icon: "figure.soccer",              targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.soccer.rawValue)]),
+            WorkoutCategory(name: "Softball",          icon: "figure.softball",            targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.softball.rawValue)]),
+            WorkoutCategory(name: "Squash",            icon: "figure.squash",              targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.squash.rawValue)]),
+            WorkoutCategory(name: "Stair Climbing",    icon: "figure.stair.stepper",       targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.stairClimbing.rawValue)]),
+            WorkoutCategory(name: "Stairs",            icon: "figure.stairs",              targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.stairs.rawValue)]),
+            WorkoutCategory(name: "Step Training",     icon: "figure.step.training",       targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.stepTraining.rawValue)]),
+            WorkoutCategory(name: "Strength",          icon: "figure.strengthtraining.traditional", targetPerWeek: 4, activityTypeRawValues: [Int(HKWorkoutActivityType.traditionalStrengthTraining.rawValue)]),
+            WorkoutCategory(name: "Surfing",           icon: "figure.surfing",             targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.surfingSports.rawValue)]),
+            WorkoutCategory(name: "Swimming",          icon: "figure.pool.swim",           targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.swimming.rawValue)]),
+            WorkoutCategory(name: "Table Tennis",      icon: "figure.table.tennis",        targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.tableTennis.rawValue)]),
+            WorkoutCategory(name: "Tai Chi",           icon: "figure.taichi",              targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.taiChi.rawValue)]),
+            WorkoutCategory(name: "Tennis",            icon: "figure.tennis",              targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.tennis.rawValue)]),
+            WorkoutCategory(name: "Track & Field",     icon: "figure.track.and.field",     targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.trackAndField.rawValue)]),
+            WorkoutCategory(name: "Volleyball",        icon: "figure.volleyball",          targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.volleyball.rawValue)]),
+            WorkoutCategory(name: "Walking",           icon: "figure.walk",                targetPerWeek: 5, activityTypeRawValues: [Int(HKWorkoutActivityType.walking.rawValue)]),
+            WorkoutCategory(name: "Water Fitness",     icon: "figure.water.fitness",       targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.waterFitness.rawValue)]),
+            WorkoutCategory(name: "Water Polo",        icon: "figure.water.polo",          targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.waterPolo.rawValue)]),
+            WorkoutCategory(name: "Wheelchair Run",    icon: "figure.roll.runningpace",    targetPerWeek: 3, activityTypeRawValues: [Int(HKWorkoutActivityType.wheelchairRunPace.rawValue)]),
+            WorkoutCategory(name: "Wheelchair Walk",   icon: "figure.roll",                targetPerWeek: 5, activityTypeRawValues: [Int(HKWorkoutActivityType.wheelchairWalkPace.rawValue)]),
+            WorkoutCategory(name: "Wrestling",         icon: "figure.wrestling",           targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.wrestling.rawValue)]),
+            WorkoutCategory(name: "Yoga",              icon: "figure.yoga",                targetPerWeek: 2, activityTypeRawValues: [Int(HKWorkoutActivityType.yoga.rawValue), Int(HKWorkoutActivityType.mindAndBody.rawValue)]),
         ]
     }()
 

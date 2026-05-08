@@ -18,6 +18,10 @@ final class AppState: ObservableObject {
     /// Not persisted — always fetched fresh from HealthKit.
     @Published var entries: [WorkoutEntry] = []
 
+    /// Entries fetched for all known library types, used by WeeklyActivityStrip.
+    /// Shows workouts in the strip even when they don't match a configured goal.
+    @Published var stripEntries: [WorkoutEntry] = []
+
     /// Weekly goal snapshots for the current ISO week, one per category.
     @Published var weeklyGoals: [WeeklyGoal] = []
 
@@ -45,7 +49,12 @@ final class AppState: ObservableObject {
     // MARK: - Init
 
     init() {
+        #if DEBUG
+        let forced = UserDefaults.standard.bool(forKey: "debug.forceOnboarding")
+        hasCompletedOnboarding = forced ? false : UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+        #else
         hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+        #endif
         loadCategories()
     }
 
@@ -87,6 +96,7 @@ final class AppState: ObservableObject {
         do {
             weeklyGoals = try await healthKitManager.fetchCurrentWeekGoals(for: categories)
             entries = try await healthKitManager.fetchCurrentWeekEntries(for: categories)
+            stripEntries = try await healthKitManager.fetchCurrentWeekEntries(for: HealthKitManager.categoryLibrary)
             errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
@@ -143,6 +153,9 @@ final class AppState: ObservableObject {
 
     func completeOnboarding() {
         hasCompletedOnboarding = true
+        #if DEBUG
+        guard !UserDefaults.standard.bool(forKey: "debug.forceOnboarding") else { return }
+        #endif
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
     }
 

@@ -9,7 +9,7 @@ import SwiftUI
 struct ProfileView: View {
 
     @EnvironmentObject var appState: AppState
-    @State private var showingAddGoal = false
+    @State private var showGoalSetup = false
 
     var body: some View {
         NavigationStack {
@@ -66,12 +66,13 @@ struct ProfileView: View {
             .navigationTitle("Profile")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    EditButton()
+                    Button("Edit") { showGoalSetup = true }
                 }
             }
         }
-        .sheet(isPresented: $showingAddGoal) {
-            AddGoalView()
+        .sheet(isPresented: $showGoalSetup) {
+            GoalSetupView(mode: .profile)
+                .environmentObject(appState)
         }
     }
 

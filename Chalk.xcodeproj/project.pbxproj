@@ -27,14 +27,15 @@
 		9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8996BAC4BE1B0933799F2A /* RootView.swift */; };
 		A5FE3B26D2A66263EB74B396 /* MockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EEB28F0796E195B8EAC61A /* MockDataManager.swift */; };
 		AF9746C18CBB9F6E03ECCD98 /* WeeklyGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EC4AB09416D122BD6B0271 /* WeeklyGoal.swift */; };
+		CC1A2B3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */; };
 		D5195807981FAA7C25B9C268 /* MockDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B517FBDFF1B7D9421B67DE1 /* MockDataView.swift */; };
+		D5A2419BD9F71C6B5B4659B4 /* GoalSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477A2E250F1ED8A1DA592ACA /* GoalSetupView.swift */; };
 		D734CB39598AC5A1DE4E1770 /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B303376FFB68E0436611978 /* GoalCardView.swift */; };
 		DB2FF06516BF92CDDA2A4C57 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7B4A4B527C59DC38663E0 /* HealthKitManager.swift */; };
 		DC16BAE2D18FBF895E3DEA9D /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1873FB10790F679E6A5D4F /* AddGoalView.swift */; };
+		DD2A3B4C5D6E7F8A9B0C1D2E /* Chalk/chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */; };
 		EAD788E2DD1AF9687D049C91 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */; };
-		CC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
-		DD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,12 +85,13 @@
 		0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEntry.swift; sourceTree = "<group>"; };
 		08EC4AB09416D122BD6B0271 /* WeeklyGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyGoal.swift; sourceTree = "<group>"; };
 		1A638B411D672AD02302874C /* WorkoutCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCategory.swift; sourceTree = "<group>"; };
-		220D8F721FD74B8B2E1F800D /* Chalk.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Chalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		220D8F721FD74B8B2E1F800D /* Chalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25650C2677D84948E833BB97 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ChalkWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChalkWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9B4826674EA70468935362 /* ChalkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkApp.swift; sourceTree = "<group>"; };
 		3B517FBDFF1B7D9421B67DE1 /* MockDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataView.swift; sourceTree = "<group>"; };
 		3F7699C284F9D58C082638E2 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		477A2E250F1ED8A1DA592ACA /* GoalSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalSetupView.swift; sourceTree = "<group>"; };
 		4B303376FFB68E0436611978 /* GoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCardView.swift; sourceTree = "<group>"; };
 		4ED7B4A4B527C59DC38663E0 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		53EEB28F0796E195B8EAC61A /* MockDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataManager.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChalkWatch.entitlements; sourceTree = "<group>"; };
 		98F12DA7CE371E02E20D1218 /* Chalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chalk.entitlements; sourceTree = "<group>"; };
 		A0EC88D635EDBEF88E4DF592 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Chalk/chalk_app_icon.icon; sourceTree = SOURCE_ROOT; };
 		B26090F98CE73253C07B1BC6 /* WeeklyActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyActivityStrip.swift; sourceTree = "<group>"; };
 		B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
 		BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
@@ -113,7 +116,6 @@
 		EB1873FB10790F679E6A5D4F /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		F4653102AB269C5F14198ED2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWatchApp.swift; sourceTree = "<group>"; };
-		AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Chalk/chalk_app_icon.icon; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -154,7 +156,6 @@
 				DB0B8210E547CB58CF7F3C27 /* Models */,
 				8BE6288F356FF9CD536E91E8 /* Shared */,
 				F4653102AB269C5F14198ED2 /* Assets.xcassets */,
-				AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */,
 				98F12DA7CE371E02E20D1218 /* Chalk.entitlements */,
 				6523D743F07E4B507027D7DB /* Info.plist */,
 			);
@@ -183,7 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				871B0D601CAFFDC4967012FB /* Assets.xcassets */,
-				AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */,
+				AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */,
 				90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */,
 				FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */,
 				85189A9997D171E3E7757A20 /* Info.plist */,
@@ -195,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				EB1873FB10790F679E6A5D4F /* AddGoalView.swift */,
+				477A2E250F1ED8A1DA592ACA /* GoalSetupView.swift */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -358,15 +360,12 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					166887360A5DA10F1795995D = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					3328DA0AF66E48D908073020 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					7CBB71874FB9BB11BDF222D2 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -396,7 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39E8F6EA15A0388675697DDC /* Assets.xcassets in Resources */,
-				CC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */,
+				CC1A2B3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +404,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				815574C0DC5556766D3BBB6E /* Assets.xcassets in Resources */,
-				DD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */,
+				DD2A3B4C5D6E7F8A9B0C1D2E /* Chalk/chalk_app_icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +436,7 @@
 				0ECAD737BD11820127F1EF47 /* AppState.swift in Sources */,
 				6B5DCC02344F72085492315F /* ChalkApp.swift in Sources */,
 				D734CB39598AC5A1DE4E1770 /* GoalCardView.swift in Sources */,
+				D5A2419BD9F71C6B5B4659B4 /* GoalSetupView.swift in Sources */,
 				DB2FF06516BF92CDDA2A4C57 /* HealthKitManager.swift in Sources */,
 				03AC0030E12E62866251762B /* HistoryView.swift in Sources */,
 				493A85FC55643523AFA99A28 /* HomeView.swift in Sources */,
@@ -476,6 +476,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Widgets/ChalkWidgetExtension/ChalkWidgetExtension.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Widgets/ChalkWidgetExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -494,6 +495,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Widgets/ChalkWidgetExtension/ChalkWidgetExtension.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Widgets/ChalkWidgetExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -515,6 +517,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Chalk.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -598,6 +601,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = chalk_app_icon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ChalkWatch/ChalkWatch.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = ChalkWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chalkweekly.app.watchkitapp;
 				SDKROOT = watchos;
@@ -615,6 +619,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Chalk.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -633,6 +638,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = chalk_app_icon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ChalkWatch/ChalkWatch.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = ChalkWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chalkweekly.app.watchkitapp;
 				SDKROOT = watchos;

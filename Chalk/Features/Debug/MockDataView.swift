@@ -15,6 +15,7 @@ struct MockDataView: View {
                 activeBanner
             }
 
+            onboardingSection
             presetSection
 
             if manager.selectedPreset == .custom {
@@ -43,6 +44,28 @@ struct MockDataView: View {
                 }
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(.red)
+            }
+        }
+    }
+
+    private var onboardingSection: some View {
+        Section("Onboarding") {
+            Toggle(isOn: Binding(
+                get: { UserDefaults.standard.bool(forKey: "debug.forceOnboarding") },
+                set: { UserDefaults.standard.set($0, forKey: "debug.forceOnboarding") }
+            )) {
+                Label {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Force onboarding on launch")
+                            .font(.body)
+                        Text("Onboarding shows every time; completing it won't persist.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } icon: {
+                    Image(systemName: "arrow.counterclockwise")
+                        .foregroundStyle(.purple)
+                }
             }
         }
     }

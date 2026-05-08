@@ -49,8 +49,8 @@ struct HomeView: View {
 
                     // Weekly activity strip
                     WeeklyActivityStrip(
-                        entries: appState.entries,
-                        categories: appState.categories
+                        entries: appState.stripEntries,
+                        categories: HealthKitManager.categoryLibrary
                     )
                     .padding(.horizontal, Constants.horizonalPadding)
                     .padding(.bottom, Constants.bottomPadding)

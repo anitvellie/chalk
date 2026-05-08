@@ -46,11 +46,13 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 ## Default Goals (updated from original spec)
 Upper Body and Legs were **merged into a single Strength category** because both map to
 `HKWorkoutActivityType.traditionalStrengthTraining` in HealthKit with no reliable way to
-distinguish them from workout metadata. Current defaults:
+distinguish them from workout metadata. Current seed defaults (written once on first launch via `HealthKitManager.defaultCategories`):
 
-- **Strength**: 4x/week → HK `.traditionalStrengthTraining` + `.functionalStrengthTraining`
+- **Strength**: 4x/week → HK `.traditionalStrengthTraining` + `.functionalStrengthTraining` (combined in defaultCategories for legacy reasons)
 - **Running**: 3x/week → HK `.running`
 - **Yoga**: 1x/week → HK `.yoga` + `.mindAndBody`
+
+In `categoryLibrary` (the picker catalog), Strength and Functional Strength are **separate entries** mapping to one HK type each. Yoga still bundles yoga + mindAndBody since they're indistinguishable in practice.
 
 ## Decisions Made
 
@@ -127,16 +129,16 @@ distinguish them from workout metadata. Current defaults:
 - Stats tab removed in Phase 3.5 cleanup (summary data will move to Home in a later pass)
 
 #### AppState / HealthKit
-- `refreshGoals()` now also populates `entries` (two sequential HK fetches: goals then entries)
-- `HealthKitManager.fetchCurrentWeekEntries(for:)` mirrors `fetchCurrentWeekGoals` but returns flat `[WorkoutEntry]` sorted newest-first
+- `refreshGoals()` populates three things: `weeklyGoals` (goal counts for configured categories), `entries` (entries for configured categories, used by History), and `stripEntries` (entries for all `categoryLibrary` types, used by WeeklyActivityStrip)
+- `HealthKitManager.fetchCurrentWeekEntries(for:)` mirrors `fetchCurrentWeekGoals` but returns flat `[WorkoutEntry]` sorted newest-first; called twice per refresh with different category sets
 - `addCategory`, `deleteCategory`, `updateCategory` implemented in `AppState`
 
-#### Goal creation (AddGoalView)
-- `HealthKitManager.categoryLibrary` — `static let` (lazy, evaluated once) giving all 8 supported types stable UUIDs; superset of `defaultCategories`
-- `AddGoalView` filters the library to exclude already-tracked HK activity raw values so you can't add duplicates
-- Tile selection stores the template in `@State`; tapping again deselects; frequency resets to library default on each new selection
-- `commitSelection()` copies the template, overwrites `targetPerWeek`, calls `appState.addCategory`, dismisses, then fires `Task { await appState.refreshGoals() }`
-- `ProfileView` has `.onDelete` (swipe-to-delete) + `EditButton` in toolbar
+#### Goal management (GoalSetupView)
+- `HealthKitManager.categoryLibrary` — `static let` (lazy, evaluated once) with **65 entries** covering the full HealthKit workout type catalog, sorted alphabetically by display name; stable UUIDs for identity-based rendering; superset of `defaultCategories`
+- `GoalSetupView` is the primary goal management surface, used in two modes — `.onboarding` and `.profile`; `AddGoalView` still exists but is no longer wired into the main flow
+- Tapping a sport tile in `GoalSetupView` immediately adds the goal at `targetPerWeek = 2` (no intermediate picker step); existing goals show inline +/- stepper and delete button
+- `ProfileView` Edit button → `GoalSetupView(mode: .profile)` sheet; swipe-to-delete still available in the Profile list as a secondary path
+- Onboarding "Get Started" → `GoalSetupView(mode: .onboarding)` full-screen cover → `completeOnboarding()` on Continue or Skip
 
 ## Phase 3 Status: ✅ Complete
 All Phase 3 deliverables shipped:
@@ -151,15 +153,15 @@ This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tigh
 
 ### Shipped in 3.5
 - **Onboarding flow** — `Chalk/Features/Onboarding/OnboardingView.swift`; two-page TabView (`.page` style) gated by `AppState.hasCompletedOnboarding` (UserDefaults `"hasCompletedOnboarding"` key); page 1 has three floating goal cards with independent sine-wave animation via `TimelineView`; page 2 has two floating weekly strip cards with mock workout data; `AppState.completeOnboarding()` flips the flag and SwiftUI transitions to `RootView`, which fires `setupHealthKit()` as usual
+- **Goal setup screen** — `Chalk/Features/Goals/GoalSetupView.swift`; replaces `AddGoalView` as the primary goal management surface; two modes: `.onboarding` (shown after "Get Started" via `.fullScreenCover`; has Continue + Skip bottom bar) and `.profile` (shown from Profile → Edit as a `.sheet`; has Done toolbar button). Top section lists configured goals with inline +/- frequency stepper and trash delete. Bottom section shows a 2-column grid of all untracked sport types — tapping adds the goal immediately at 2×/week default. Sport library expanded to 65 entries covering the full HealthKit workout type catalog, sorted alphabetically. `WorkoutCategory+Color.swift` updated with semantic color groupings for all new icons.
+- **Weekly strip shows all workouts** — `AppState` now fetches `stripEntries` (entries for all `categoryLibrary` types) separately from `entries` (user-configured categories only); `WeeklyActivityStrip` on Home receives `stripEntries` + `HealthKitManager.categoryLibrary` so it shows every workout logged that week even when no matching goal is configured
+- **Debug: force onboarding** — `AppState.init()` checks `UserDefaults "debug.forceOnboarding"` (DEBUG only); if set, `hasCompletedOnboarding` starts `false` each launch and `completeOnboarding()` skips the UserDefaults persist, so onboarding shows every launch without permanently clearing the real flag. Toggled via Profile → Developer → Mock Data → Onboarding section.
 
 ### Known issues carried forward
-- No edit-frequency flow for existing goals (can only delete + re-add)
 - History/Profile use generic `List` presentation — visual polish deferred
-- `ProfileView` has a dead `showingAddGoal` state; Add Goal only reachable via Profile
 
 ### Ideas / backlog
 - **Goal management from Home** — add a way to add/edit/delete goals directly from the home screen (e.g. long-press on a card → context menu, or an "Edit" button in the nav bar) so users never need to go to Profile for this
-- **Edit-frequency flow** — let users change `targetPerWeek` on an existing goal without delete + re-add
 - **Stats surface on Home** — fold the key stats (total sessions this week, streak, etc.) into the Home screen as a header or collapsible section, since the standalone Stats tab was removed
 - **Empty state for Home** — when no goals are configured yet, show an onboarding-style prompt to add the first goal
 - **Pull-to-refresh feedback** — visual confirmation that a refresh completed (e.g. last-updated timestamp below the week range header)
@@ -206,7 +208,8 @@ Chalk/                              ← git repo root
 │   │   ├── Profile/
 │   │   │   └── ProfileView.swift   ← category list + HK auth status
 │   │   ├── Goals/
-│   │   │   └── AddGoalView.swift   ← type picker grid + frequency stepper sheet
+│   │   │   ├── GoalSetupView.swift ← primary goal management (onboarding + profile modes); tap-to-add grid + inline frequency stepper
+│   │   │   └── AddGoalView.swift   ← legacy single-goal sheet (not wired into main flow)
 │   │   └── Onboarding/
 │   │       └── OnboardingView.swift ← two-page first-launch flow; floating cards + floating weekly strips
 │   ├── HealthKit/

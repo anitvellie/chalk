@@ -8,6 +8,7 @@ import SwiftUI
 struct OnboardingView: View {
     @EnvironmentObject var appState: AppState
     @State private var currentPage = 0
+    @State private var showGoalSetup = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -39,7 +40,7 @@ struct OnboardingView: View {
                 // Always rendered so the text above sits at the same Y on both pages.
                 // Invisible and non-interactive on page 1.
                 Button {
-                    appState.completeOnboarding()
+                    showGoalSetup = true
                 } label: {
                     Text("Get started")
                         .font(.system(size: 17, weight: .medium))
@@ -57,6 +58,10 @@ struct OnboardingView: View {
             .animation(.easeInOut(duration: 0.35), value: currentPage)
         }
         .chalkBackground()
+        .fullScreenCover(isPresented: $showGoalSetup) {
+            GoalSetupView(mode: .onboarding)
+                .environmentObject(appState)
+        }
     }
 }
 

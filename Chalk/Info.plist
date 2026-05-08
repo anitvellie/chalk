@@ -26,8 +26,6 @@
 	<string>Chalk does not write any health data.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
