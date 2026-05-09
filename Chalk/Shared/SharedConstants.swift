@@ -34,17 +34,17 @@ enum SharedConstants {
 
     /// Type-safe key namespace for values stored in the shared `UserDefaults`.
     enum UserDefaultsKey {
-        static let preferences = "userPreferences"
-        // TODO: Phase 4 — Add keys for widget snapshot data, e.g.:
-        //   static let weeklyGoalsData = "weeklyGoalsData"
-        //   static let lastRefreshDate = "lastRefreshDate"
+        static let preferences    = "userPreferences"
+        static let categories     = "categories"
+        static let widgetSnapshot = "widgetSnapshot"
     }
 
     // MARK: - Widget Configuration
 
     /// Kind strings matching those declared in the WidgetBundle.
     enum WidgetKind {
-        static let medium     = "ChalkMediumWidget"
-        static let lockScreen = "ChalkLockScreenWidget"
+        static let singleGoal = "chalk.widget.singleGoal"
+        static let allGoals   = "chalk.widget.allGoals"
+        static let weekly     = "chalk.widget.weekly"
     }
 }

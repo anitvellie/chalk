@@ -3,6 +3,7 @@
 
 import SwiftUI
 import Combine
+import WidgetKit
 
 /// Central observable state object injected into the SwiftUI environment.
 /// Holds all top-level app data and drives the UI reactively.
@@ -114,6 +115,9 @@ final class AppState: ObservableObject {
 
             errorMessage = nil
             lastRefreshed = Date()
+            let snapshot = buildWidgetSnapshot()
+            saveWidgetSnapshot(snapshot)
+            WidgetCenter.shared.reloadAllTimelines()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -170,6 +174,54 @@ final class AppState: ObservableObject {
     }
     #endif
 
+    // MARK: - Widget Snapshot
+
+    private func buildWidgetSnapshot() -> WidgetSnapshot {
+        let goalSnapshots = weeklyGoals.map { goal in
+            GoalSnapshot(
+                id: goal.category.id,
+                name: goal.category.name,
+                icon: goal.category.icon,
+                completed: goal.completedCount,
+                target: goal.targetCount
+            )
+        }
+
+        // Same week-start logic as WeeklyActivityStrip so the widget strip is always in sync.
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        let weekday = cal.component(.weekday, from: today)
+        let daysFromStart = (weekday - cal.firstWeekday + 7) % 7
+        guard let weekStart = cal.date(byAdding: .day, value: -daysFromStart, to: today) else {
+            return WidgetSnapshot(goals: goalSnapshots, weekDays: [], lastRefreshed: Date())
+        }
+        let weekDates = (0..<7).compactMap { cal.date(byAdding: .day, value: $0, to: weekStart) }
+
+        let categoryMap = Dictionary(uniqueKeysWithValues: HealthKitManager.categoryLibrary.map { ($0.id, $0) })
+        // Sort longest-first so workoutIcons[0] is the most prominent workout of that day.
+        var iconsByDay: [Date: [String]] = [:]
+        for entry in stripEntries.filter({ !$0.isHidden }).sorted(by: { $0.duration > $1.duration }) {
+            guard let cat = categoryMap[entry.categoryId] else { continue }
+            let day = cal.startOfDay(for: entry.date)
+            iconsByDay[day, default: []].append(cat.icon)
+        }
+
+        let daySnapshots = weekDates.map { day -> DaySnapshot in
+            let icons = iconsByDay[day] ?? []
+            var seen = Set<String>()
+            let unique = icons.filter { seen.insert($0).inserted }
+            return DaySnapshot(date: day, workoutIcons: unique)
+        }
+
+        return WidgetSnapshot(goals: goalSnapshots, weekDays: daySnapshots, lastRefreshed: Date())
+    }
+
+    private func saveWidgetSnapshot(_ snapshot: WidgetSnapshot) {
+        guard let data = try? JSONEncoder().encode(snapshot) else { return }
+        let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
+        store.set(data, forKey: SharedConstants.UserDefaultsKey.widgetSnapshot)
+    }
+
     // MARK: - Persistence (categories)
 
     /// Loads categories from the shared App Group UserDefaults.
@@ -177,7 +229,7 @@ final class AppState: ObservableObject {
     /// Seeds from `HealthKitManager.defaultCategories` on first launch.
     private func loadCategories() {
         let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
-        if let data = store.data(forKey: "categories"),
+        if let data = store.data(forKey: SharedConstants.UserDefaultsKey.categories),
            let saved = try? JSONDecoder().decode([WorkoutCategory].self, from: data) {
             categories = saved
         } else {
@@ -190,7 +242,7 @@ final class AppState: ObservableObject {
     func saveCategories() {
         let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
         if let data = try? JSONEncoder().encode(categories) {
-            store.set(data, forKey: "categories")
+            store.set(data, forKey: SharedConstants.UserDefaultsKey.categories)
         }
     }
 

@@ -10,13 +10,14 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 - Phase 2: ✅ Complete
 - Phase 3: ✅ Complete
 - Phase 3.5: 🚧 In progress (UI hardening + feedback)
+- Phase 4: ✅ Complete
 
 ## Phases
 - [x] Phase 1 — Project scaffold, data models, target setup
 - [x] Phase 2 — HealthKit integration
 - [x] Phase 3 — Core UI (home screen, weekly overview, goal creation)
 - [ ] Phase 3.5 — UI hardening (feedback, polish, edge cases)
-- [ ] Phase 4 — Widgets (home screen + lock screen via WidgetKit)
+- [x] Phase 4 — Widgets (home screen via WidgetKit)
 - [ ] Phase 5 — watchOS companion app
 
 ## Tech Constraints (non-negotiable)
@@ -59,7 +60,7 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 
 ### Data model
 - `WorkoutCategory` has **no `colorHex` field** — colour is derived entirely in the view layer
-- `WorkoutCategory.displayColor: Color` — app-only view extension in `Chalk/App/WorkoutCategory+Color.swift`; switches on the `icon` SF Symbol string to return a `Color(uiColor:)` system colour for every known workout type; this is the **single source of truth for category colours** used by goal-card rings, weekly strip icons, history chips, and profile chips. Add a new `case` here whenever a new type is added to `categoryLibrary`
+- `WorkoutCategory.displayColor: Color` — app-only view extension in `Chalk/App/WorkoutCategory+Color.swift`; forwards to `WorkoutColorMapping.color(for: icon)` (in Shared) which holds the full icon→`Color(uiColor:)` switch. `WorkoutColorMapping` is compiled into both the app and widget extension — add a new `case` there whenever a new type is added to `categoryLibrary`
 - Rowing icon is `figure.indoor.rowing` (not `figure.rowing` — that symbol does not exist in SF Symbols)
 - `WorkoutEntry.categoryId` is a UUID reference, not an embedded object
 - `WorkoutSource` is an enum: `.healthKit` / `.manual`
@@ -73,7 +74,7 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 - HK activity type raw values are populated via `HealthKitManager.defaultCategories` (resolves from `HKWorkoutActivityType.case.rawValue`) — never hardcoded in model layer
 - A single `HKWorkoutType` authorisation request covers all activity types; no per-category request needed
 - `HealthKitManager.walkingActivityTypeRawValue: Int` — static property exposing the walking raw value as a plain `Int` so `AppState` can identify walking entries for threshold filtering without importing HealthKit
-- Background delivery is **implemented** in `HealthKitManager.enableBackgroundDelivery()` but **not yet activated** — wire it up in Phase 4 alongside widget timeline refreshes; requires "Background Delivery" sub-capability in Xcode
+- Background delivery is **implemented** in `HealthKitManager.enableBackgroundDelivery()` but **not yet activated** — wire it up in Phase 5 alongside watchOS; requires "Background Delivery" sub-capability in Xcode; widget timelines are currently refreshed by `WidgetCenter.shared.reloadAllTimelines()` called from `AppState.refreshGoals()` instead
 
 ### Duplicate workout detection
 - `WorkoutEntry.isHidden: Bool` (default `false`) marks entries suppressed by overlap deduplication
@@ -84,8 +85,9 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 - Motivation: cross-app integrations (e.g. Nike Run Club → Strava) create duplicate HK samples for the same workout; since Chalk only tracks *that* a workout happened (not pace/distance), one entry per session is sufficient
 
 ### Persistence
-- **Categories**: JSON-encoded to App Group UserDefaults; falls back to `UserDefaults.standard` when App Group is not yet configured (safe for development before signing is finalised)
+- **Categories**: JSON-encoded to App Group UserDefaults under `SharedConstants.UserDefaultsKey.categories`; falls back to `UserDefaults.standard` when App Group is not yet configured (safe for development before signing is finalised)
 - **UserPreferences**: JSON-encoded to App Group UserDefaults under `SharedConstants.UserDefaultsKey.preferences`; loaded in `AppState.init()`, saved via `AppState.savePreferences()`
+- **WidgetSnapshot**: JSON-encoded to App Group UserDefaults under `SharedConstants.UserDefaultsKey.widgetSnapshot` after every successful `refreshGoals()`; read by all three widget providers — no HealthKit access needed in the extension
 - **WorkoutEntries**: not cached — fetched fresh from HealthKit on every `refreshGoals()` call
 - **WeeklyGoals**: never stored; derived on the fly
 
@@ -190,6 +192,31 @@ This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tigh
 - **Indoor vs outdoor cycling** — HealthKit uses `HKWorkoutActivityType.cycling` for both; distinction is in `HKMetadataKeyIndoorWorkout` metadata. Deferred — would require reading metadata in `HealthKitManager.fetchWorkouts`.
 - **User-selectable duplicate resolution** — when overlap dedup hides an entry, surface both options in a UI and let the user choose which one to keep (e.g. prefer Nike's active duration vs Strava's elapsed time); hidden entries are already retained in `AppState.entries` to support this
 
+## Phase 4 — Widgets ✅ Complete
+
+### Widget lineup
+
+| Widget | Size | Kind string | Config intent |
+|--------|------|-------------|---------------|
+| Single Goal | Small | `chalk.widget.singleGoal` | `SelectGoalIntent` — goal picker + colour style |
+| All Goals | Small | `chalk.widget.allGoals` | `AllGoalsIntent` — colour style |
+| Weekly Progress | Medium | `chalk.widget.weekly` | `WeeklyIntent` — display style + colour style |
+
+### Architecture
+
+- **Data bridge** — `WidgetSnapshot` (Codable, in Shared) contains `[GoalSnapshot]` + `[DaySnapshot]` (7 days). `AppState.refreshGoals()` writes a fresh snapshot to shared UserDefaults and calls `WidgetCenter.shared.reloadAllTimelines()` after every successful sync.
+- **Providers** — each widget uses `AppIntentTimelineProvider`; configuration intent values are baked into the entry struct at provider time so views receive a plain, fully-resolved value (no intent look-up in the view layer). Timeline policy: `.after(nextMidnight())` so today-highlighting updates each day even without an app refresh.
+- **Goal entity** — `GoalEntity` + `GoalEntityQuery` (AppIntents) power the goal picker in `SelectGoalIntent`. Query reads from the widget snapshot; falls back to the raw `categories` UserDefaults key if no snapshot exists yet (pre-first-launch).
+- **Colour mapping** — `WorkoutColorMapping` (Shared) holds the icon→`Color` switch previously in `WorkoutCategory+Color.swift`. Both targets compile it; the app-only extension now just calls `WorkoutColorMapping.color(for: icon)`.
+
+### Widget styles
+
+- **Colour mode** — `ColorModeAppEnum`: `.color` (category colours, default) / `.monochrome` (charcoal gradient `Color(white: 0.28)` → `Color(white: 0.18)`)
+- **Display style** (Weekly only) — `DisplayStyleAppEnum`: `.numbered` (icon + "X/Y" per goal, up to 4) / `.wheel` (progress rings, max 2)
+- **Single Goal ring** — `WidgetRingCanvas` (Canvas, same arc logic as app's `ContinuousRingView`); icon + "X/Y" centred inside; defined in `SingleGoalWidgetView.swift` and reused by the wheel panel
+- **All Goals cap** — shows at most 4 goals; icon/text size and row spacing adapt to count (1–2 / 3 / 4)
+- **Weekly strip** — same day-letter + date-number + icon logic as `WeeklyActivityStrip`; shows at most 1 icon per column (longest workout); 20 pt `.circle.fill` icons; numbered panel uses plain SF Symbol (no circle)
+
 ## Version Control
 - Git is used from day one
 - Default branch: `main`
@@ -239,10 +266,18 @@ Chalk/                              ← git repo root
 │   ├── HealthKit/
 │   │   └── HealthKitManager.swift  ← sole HealthKit importer; includes defaultCategories seed data
 │   ├── Shared/
-│   │   └── SharedConstants.swift   ← App Group ID, UserDefaults keys, WidgetKind; compiled into app + widget
+│   │   ├── SharedConstants.swift   ← App Group ID, UserDefaults keys, WidgetKind; compiled into app + widget
+│   │   ├── WidgetSnapshot.swift    ← GoalSnapshot + DaySnapshot + WidgetSnapshot (Codable); app → widget bridge
+│   │   └── WorkoutColorMapping.swift ← icon→Color switch; compiled into app + widget (replaces per-target duplication)
 │   ├── Widgets/
 │   │   └── ChalkWidgetExtension/
-│   │       └── ChalkWidgetExtension.swift  ← Phase 1 stub; implement in Phase 4
+│   │       ├── ChalkWidgetExtension.swift  ← @main WidgetBundle + 3 Widget declarations
+│   │       ├── GoalEntity.swift            ← AppEntity + EntityQuery for SelectGoalIntent goal picker
+│   │       ├── WidgetIntents.swift         ← SelectGoalIntent, AllGoalsIntent, WeeklyIntent, ColorModeAppEnum, DisplayStyleAppEnum
+│   │       ├── WidgetProviders.swift       ← 3 AppIntentTimelineProviders; bakes intent config into entries
+│   │       ├── SingleGoalWidgetView.swift  ← large ring + centred icon + count; also defines WidgetRingCanvas
+│   │       ├── AllGoalsWidgetView.swift    ← rows of icon + count; colour or charcoal monochrome; max 4 goals
+│   │       └── WeeklyWidgetView.swift      ← goals panel (numbered or wheel) + divider + 7-day strip
 │   ├── Assets.xcassets             ← AccentColor (#135bec), AppIcon stub
 │   ├── Chalk.entitlements          ← generated by xcodegen; edit via project.yml not directly
 │   └── Design/                     ← mockup PNGs (add manually)
