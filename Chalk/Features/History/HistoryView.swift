@@ -2,7 +2,7 @@
 // Chalk — History Tab
 //
 // Lists this week's workout entries sourced from HealthKit,
-// sorted newest-first. Each row shows the category, date/time, and duration.
+// sorted newest-first. Covers all activity types, not just configured goals.
 
 import SwiftUI
 
@@ -10,14 +10,18 @@ struct HistoryView: View {
 
     @EnvironmentObject var appState: AppState
 
+    private var categoryMap: [UUID: WorkoutCategory] {
+        Dictionary(uniqueKeysWithValues: HealthKitManager.categoryLibrary.map { ($0.id, $0) })
+    }
+
     private var sortedEntries: [WorkoutEntry] {
-        appState.entries.filter { !$0.isHidden }.sorted { $0.date > $1.date }
+        appState.stripEntries.filter { !$0.isHidden }.sorted { $0.date > $1.date }
     }
 
     var body: some View {
         NavigationStack {
             Group {
-                if appState.entries.filter({ !$0.isHidden }).isEmpty && !appState.isLoading {
+                if sortedEntries.isEmpty && !appState.isLoading {
                     ContentUnavailableView(
                         "No Workouts",
                         systemImage: "figure.run.circle",
@@ -31,7 +35,7 @@ struct HistoryView: View {
             }
             .navigationTitle("History")
             .overlay {
-                if appState.isLoading && appState.entries.isEmpty {
+                if appState.isLoading && appState.stripEntries.isEmpty {
                     ProgressView()
                 }
             }
@@ -41,7 +45,7 @@ struct HistoryView: View {
 
     @ViewBuilder
     private func entryRow(_ entry: WorkoutEntry) -> some View {
-        let category = appState.categories.first { $0.id == entry.categoryId }
+        let category = categoryMap[entry.categoryId]
 
         HStack(spacing: 12) {
             // Category icon chip
