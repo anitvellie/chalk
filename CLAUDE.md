@@ -42,6 +42,7 @@ The name "Chalk" references gym chalk and the tradition of chalking up tally mar
 - `WorkoutCategory`: id, name, icon (SF Symbol name), targetPerWeek (Int), activityTypeRawValues ([Int])
 - `WorkoutEntry`: id, categoryId (UUID ref), date, duration, source (WorkoutSource enum), externalId (UUID?)
 - `WeeklyGoal`: derived struct — never persisted; computed from WorkoutEntry records for current ISO week
+- `UserPreferences`: Codable struct — minWorkoutDurationMinutes (Int, default 5), minWalkingDurationMinutes (Int, default 45), excludedActivityTypeRawValues (Set\<Int\>); persisted in App Group UserDefaults
 
 ## Default Goals (updated from original spec)
 Upper Body and Legs were **merged into a single Strength category** because both map to
@@ -71,6 +72,7 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 - `HealthKitManager` is the **sole file** that imports HealthKit; all other layers are HK-free
 - HK activity type raw values are populated via `HealthKitManager.defaultCategories` (resolves from `HKWorkoutActivityType.case.rawValue`) — never hardcoded in model layer
 - A single `HKWorkoutType` authorisation request covers all activity types; no per-category request needed
+- `HealthKitManager.walkingActivityTypeRawValue: Int` — static property exposing the walking raw value as a plain `Int` so `AppState` can identify walking entries for threshold filtering without importing HealthKit
 - Background delivery is **implemented** in `HealthKitManager.enableBackgroundDelivery()` but **not yet activated** — wire it up in Phase 4 alongside widget timeline refreshes; requires "Background Delivery" sub-capability in Xcode
 
 ### Duplicate workout detection
@@ -83,6 +85,7 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 
 ### Persistence
 - **Categories**: JSON-encoded to App Group UserDefaults; falls back to `UserDefaults.standard` when App Group is not yet configured (safe for development before signing is finalised)
+- **UserPreferences**: JSON-encoded to App Group UserDefaults under `SharedConstants.UserDefaultsKey.preferences`; loaded in `AppState.init()`, saved via `AppState.savePreferences()`
 - **WorkoutEntries**: not cached — fetched fresh from HealthKit on every `refreshGoals()` call
 - **WeeklyGoals**: never stored; derived on the fly
 
@@ -129,16 +132,30 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 - Stats tab removed in Phase 3.5 cleanup (summary data will move to Home in a later pass)
 
 #### AppState / HealthKit
-- `refreshGoals()` populates three things: `weeklyGoals` (goal counts for configured categories), `entries` (entries for configured categories, used by History), and `stripEntries` (entries for all `categoryLibrary` types, used by WeeklyActivityStrip)
-- `HealthKitManager.fetchCurrentWeekEntries(for:)` mirrors `fetchCurrentWeekGoals` but returns flat `[WorkoutEntry]` sorted newest-first; called twice per refresh with different category sets
+- `refreshGoals()` fetches raw entries via `fetchCurrentWeekEntries` (not `fetchCurrentWeekGoals`), runs them through `filterEntries(_:using:)`, then computes `weeklyGoals` via `WeeklyGoal.compute`; this single path applies user preferences to goals, History, and the strip consistently
+- `filterEntries(_:using:)` — private method in `AppState`; takes entries + the category array whose IDs they reference; drops excluded types and entries below the duration threshold (walking uses its own threshold, everything else uses the global one)
+- `AppState.lastRefreshed: Date?` — set after every successful sync; displayed as "Updated HH:MM" below the week range in HomeView
 - `addCategory`, `deleteCategory`, `updateCategory` implemented in `AppState`
+- `setMinWorkoutDuration`, `setMinWalkingDuration` — save the preference and trigger `refreshGoals` on view dismiss
+- `excludeActivityType(_ rawValues:)` — removes conflicting goals, adds to excluded set, saves, refreshes; called after user confirms the confirmation dialog in `ExcludedTypesView`
+- `includeActivityType(_ rawValues:)` — inverse of the above; removes from excluded set and refreshes
 
 #### Goal management (GoalSetupView)
 - `HealthKitManager.categoryLibrary` — `static let` (lazy, evaluated once) with **65 entries** covering the full HealthKit workout type catalog, sorted alphabetically by display name; stable UUIDs for identity-based rendering; superset of `defaultCategories`
 - `GoalSetupView` is the primary goal management surface, used in two modes — `.onboarding` and `.profile`; `AddGoalView` still exists but is no longer wired into the main flow
 - Tapping a sport tile in `GoalSetupView` immediately adds the goal at `targetPerWeek = 2` (no intermediate picker step); existing goals show inline +/- stepper and delete button
+- Excluded types appear in the add grid as `ExcludedWorkoutTile` (dimmed, eye-slash icon, non-selectable); tapping shows an alert directing the user to Profile → Excluded Types
 - `ProfileView` Edit button → `GoalSetupView(mode: .profile)` sheet; swipe-to-delete still available in the Profile list as a secondary path
 - Onboarding "Get Started" → `GoalSetupView(mode: .onboarding)` full-screen cover → `completeOnboarding()` on Continue or Skip
+
+#### History
+- `HistoryView` sources from `appState.stripEntries` (all 65 HealthKit types) — not `appState.entries` (goal-matched only); category names and icons resolved from `HealthKitManager.categoryLibrary`; this means all workouts logged that week appear in History regardless of whether the user has a matching goal
+
+#### Profile preferences
+- ProfileView has a **Preferences** section above Goals with three `NavigationLink` rows:
+  - **Min Workout Duration** → `WorkoutDurationView`: ±5 min stepper (5–60 min); saves on tap, triggers refresh on dismiss
+  - **Min Walking Duration** → `WalkingDurationView`: ±15 min stepper (15–120 min); same save/refresh pattern
+  - **Excluded Types** → `ExcludedTypesView`: full 65-type list; toggle per type (ON = shown, OFF = excluded); if the user excludes a type that has an existing goal, a `.confirmationDialog` warns them the goal will be removed before proceeding
 
 ## Phase 3 Status: ✅ Complete
 All Phase 3 deliverables shipped:
@@ -156,6 +173,9 @@ This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tigh
 - **Goal setup screen** — `Chalk/Features/Goals/GoalSetupView.swift`; replaces `AddGoalView` as the primary goal management surface; two modes: `.onboarding` (shown after "Get Started" via `.fullScreenCover`; has Continue + Skip bottom bar) and `.profile` (shown from Profile → Edit as a `.sheet`; has Done toolbar button). Top section lists configured goals with inline +/- frequency stepper and trash delete. Bottom section shows a 2-column grid of all untracked sport types — tapping adds the goal immediately at 2×/week default. Sport library expanded to 65 entries covering the full HealthKit workout type catalog, sorted alphabetically. `WorkoutCategory+Color.swift` updated with semantic color groupings for all new icons.
 - **Weekly strip shows all workouts** — `AppState` now fetches `stripEntries` (entries for all `categoryLibrary` types) separately from `entries` (user-configured categories only); `WeeklyActivityStrip` on Home receives `stripEntries` + `HealthKitManager.categoryLibrary` so it shows every workout logged that week even when no matching goal is configured
 - **Debug: force onboarding** — `AppState.init()` checks `UserDefaults "debug.forceOnboarding"` (DEBUG only); if set, `hasCompletedOnboarding` starts `false` each launch and `completeOnboarding()` skips the UserDefaults persist, so onboarding shows every launch without permanently clearing the real flag. Toggled via Profile → Developer → Mock Data → Onboarding section.
+- **Pull-to-refresh + last-synced timestamp** — `HomeView` pull-to-refresh calls `AppState.refreshGoals()`; `AppState.lastRefreshed: Date?` is set on every successful sync and displayed as "Updated HH:MM" (caption2, tertiary) below the week range header so the user can always confirm a refresh completed.
+- **History shows all workouts** — `HistoryView` switched from `appState.entries` (goal-matched) to `appState.stripEntries` (all 65 HK types); category lookup uses `HealthKitManager.categoryLibrary` so names and icons resolve for every workout type.
+- **User preferences** — three new preference screens pushed from a new "Preferences" section in ProfileView (above Goals): Min Workout Duration (5–60 min, 5-min steps), Min Walking Duration (15–120 min, 15-min steps), Excluded Types (toggle per activity type with goal-removal confirmation). Preferences persisted in App Group UserDefaults as `UserPreferences` (Codable). Filtering applied in `AppState.filterEntries(_:using:)` after every HealthKit fetch — affects goal counts, History, and the weekly strip equally.
 
 ### Known issues carried forward
 - History/Profile use generic `List` presentation — visual polish deferred
@@ -164,10 +184,10 @@ This phase happens after Phase 4 (Widgets) and before Phase 5 (watchOS). It tigh
 - **Goal management from Home** — add a way to add/edit/delete goals directly from the home screen (e.g. long-press on a card → context menu, or an "Edit" button in the nav bar) so users never need to go to Profile for this
 - **Stats surface on Home** — fold the key stats (total sessions this week, streak, etc.) into the Home screen as a header or collapsible section, since the standalone Stats tab was removed
 - **Empty state for Home** — when no goals are configured yet, show an onboarding-style prompt to add the first goal
-- **Pull-to-refresh feedback** — visual confirmation that a refresh completed (e.g. last-updated timestamp below the week range header)
 - **Goal card tap** — tapping a goal card could open a detail view with full entry history for that category
 - **Haptic feedback** — light haptics on tab switch and goal card interactions
 - **Accessibility** — audit VoiceOver labels on `SegmentedRingView` (Canvas-drawn, so needs explicit `accessibilityLabel`)
+- **Indoor vs outdoor cycling** — HealthKit uses `HKWorkoutActivityType.cycling` for both; distinction is in `HKMetadataKeyIndoorWorkout` metadata. Deferred — would require reading metadata in `HealthKitManager.fetchWorkouts`.
 - **User-selectable duplicate resolution** — when overlap dedup hides an entry, surface both options in a UI and let the user choose which one to keep (e.g. prefer Nike's active duration vs Strava's elapsed time); hidden entries are already retained in `AppState.entries` to support this
 
 ## Version Control
@@ -195,7 +215,8 @@ Chalk/                              ← git repo root
 │   ├── Models/
 │   │   ├── WorkoutCategory.swift
 │   │   ├── WorkoutEntry.swift      ← includes WorkoutSource enum
-│   │   └── WeeklyGoal.swift        ← includes Calendar.iso8601 extension
+│   │   ├── WeeklyGoal.swift        ← includes Calendar.iso8601 extension
+│   │   └── UserPreferences.swift   ← Codable prefs: duration thresholds + excluded types
 │   ├── Features/
 │   │   ├── Home/
 │   │   │   ├── HomeView.swift              ← week overview header + strip + goal card grid
@@ -206,7 +227,10 @@ Chalk/                              ← git repo root
 │   │   ├── History/
 │   │   │   └── HistoryView.swift   ← sorted entry list with category chip + duration
 │   │   ├── Profile/
-│   │   │   └── ProfileView.swift   ← category list + HK auth status
+│   │   │   ├── ProfileView.swift           ← preferences section + goal list + HK auth status
+│   │   │   ├── WorkoutDurationView.swift   ← min workout duration stepper (5–60 min, 5-min steps)
+│   │   │   ├── WalkingDurationView.swift   ← min walking duration stepper (15–120 min, 15-min steps)
+│   │   │   └── ExcludedTypesView.swift     ← per-type exclusion toggles with goal-removal confirmation
 │   │   ├── Goals/
 │   │   │   ├── GoalSetupView.swift ← primary goal management (onboarding + profile modes); tap-to-add grid + inline frequency stepper
 │   │   │   └── AddGoalView.swift   ← legacy single-goal sheet (not wired into main flow)
