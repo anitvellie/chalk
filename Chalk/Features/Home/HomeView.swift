@@ -42,6 +42,11 @@ struct HomeView: View {
                         Text(weekRangeLabel)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                        if let ts = appState.lastRefreshed {
+                            Text("Updated \(ts, formatter: Self.relativeFormatter)")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                     .padding(.horizontal, Constants.horizonalPadding)
                     .padding(.top, 4)
@@ -132,6 +137,13 @@ struct HomeView: View {
     }
 
     // MARK: - Helpers
+
+    private static let relativeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .none
+        f.timeStyle = .short
+        return f
+    }()
 
     private var weekRangeLabel: String {
         let cal = Calendar.iso8601

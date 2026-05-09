@@ -34,6 +34,9 @@ final class AppState: ObservableObject {
     /// Non-nil when a recoverable error should be surfaced to the user.
     @Published var errorMessage: String? = nil
 
+    /// Timestamp of the last successful HealthKit sync. Nil before the first fetch.
+    @Published var lastRefreshed: Date? = nil
+
     /// `true` once the user has completed the first-launch onboarding flow.
     @Published var hasCompletedOnboarding: Bool
 
@@ -98,6 +101,7 @@ final class AppState: ObservableObject {
             entries = try await healthKitManager.fetchCurrentWeekEntries(for: categories)
             stripEntries = try await healthKitManager.fetchCurrentWeekEntries(for: HealthKitManager.categoryLibrary)
             errorMessage = nil
+            lastRefreshed = Date()
         } catch {
             errorMessage = error.localizedDescription
         }
