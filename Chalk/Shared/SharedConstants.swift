@@ -34,6 +34,7 @@ enum SharedConstants {
 
     /// Type-safe key namespace for values stored in the shared `UserDefaults`.
     enum UserDefaultsKey {
+        static let preferences = "userPreferences"
         // TODO: Phase 4 — Add keys for widget snapshot data, e.g.:
         //   static let weeklyGoalsData = "weeklyGoalsData"
         //   static let lastRefreshDate = "lastRefreshDate"

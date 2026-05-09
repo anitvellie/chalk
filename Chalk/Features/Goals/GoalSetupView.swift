@@ -15,12 +15,19 @@ struct GoalSetupView: View {
 
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
+    @State private var excludedAlertType: WorkoutCategory?
 
     private var availableTemplates: [WorkoutCategory] {
         let tracked = Set(appState.categories.flatMap { $0.activityTypeRawValues })
         return HealthKitManager.categoryLibrary.filter { t in
             !t.activityTypeRawValues.contains(where: { tracked.contains($0) })
         }
+    }
+
+    private func isExcluded(_ template: WorkoutCategory) -> Bool {
+        template.activityTypeRawValues.contains(where: {
+            appState.preferences.excludedActivityTypeRawValues.contains($0)
+        })
     }
 
     var body: some View {
@@ -110,8 +117,25 @@ struct GoalSetupView: View {
                     spacing: 12
                 ) {
                     ForEach(availableTemplates) { template in
-                        WorkoutTile(template: template) { addGoal(template) }
+                        if isExcluded(template) {
+                            ExcludedWorkoutTile(template: template) {
+                                excludedAlertType = template
+                            }
+                        } else {
+                            WorkoutTile(template: template) { addGoal(template) }
+                        }
                     }
+                }
+                .alert(
+                    "\(excludedAlertType?.name ?? "") is Excluded",
+                    isPresented: Binding(
+                        get: { excludedAlertType != nil },
+                        set: { if !$0 { excludedAlertType = nil } }
+                    )
+                ) {
+                    Button("OK") { excludedAlertType = nil }
+                } message: {
+                    Text("This workout type is hidden in your preferences. Go to Profile → Excluded Types to re-enable it.")
                 }
             }
         }
@@ -238,6 +262,37 @@ private struct GoalRow: View {
         .padding(.vertical, 14)
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+// MARK: - Excluded Workout Type Tile
+
+private struct ExcludedWorkoutTile: View {
+    let template: WorkoutCategory
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: 8) {
+                Image(systemName: template.icon)
+                    .font(.system(size: 28))
+                    .foregroundStyle(.secondary)
+                    .frame(height: 36)
+                Text(template.name)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                Image(systemName: "eye.slash.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .opacity(0.55)
+        }
+        .buttonStyle(.plain)
     }
 }
 

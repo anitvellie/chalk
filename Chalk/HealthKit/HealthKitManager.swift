@@ -19,6 +19,11 @@ final class HealthKitManager: ObservableObject {
     /// Always `false` on Simulator; always `true` on iPhone.
     static var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
 
+    /// Raw integer value of `HKWorkoutActivityType.walking`.
+    /// Exposed as a plain `Int` so non-HealthKit layers (AppState) can identify
+    /// walking entries without importing HealthKit.
+    static let walkingActivityTypeRawValue: Int = Int(HKWorkoutActivityType.walking.rawValue)
+
     // MARK: - Default Categories (HK-aware seed data)
 
     /// Default `WorkoutCategory` values with `activityTypeRawValues` correctly

@@ -40,6 +40,9 @@ final class AppState: ObservableObject {
     /// `true` once the user has completed the first-launch onboarding flow.
     @Published var hasCompletedOnboarding: Bool
 
+    /// Persisted user preferences controlling duration thresholds and exclusions.
+    @Published var preferences: UserPreferences = UserPreferences()
+
     #if DEBUG
     /// Whether mock data is currently overriding live HealthKit data.
     @Published var isMockActive: Bool = false
@@ -59,6 +62,7 @@ final class AppState: ObservableObject {
         hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
         #endif
         loadCategories()
+        loadPreferences()
     }
 
     // MARK: - HealthKit Setup
@@ -86,9 +90,10 @@ final class AppState: ObservableObject {
 
     // MARK: - Data Refresh
 
-    /// Re-fetches weekly goal counts and entries from HealthKit for the current ISO week.
+    /// Re-fetches weekly goal counts and entries from HealthKit for the current ISO week,
+    /// then applies user preference filters (duration thresholds + excluded types).
     ///
-    /// Safe to call from a pull-to-refresh control or after a new category is added.
+    /// Safe to call from a pull-to-refresh control or after changing a category or preference.
     func refreshGoals() async {
         #if DEBUG
         guard !isMockActive else { return }
@@ -97,13 +102,49 @@ final class AppState: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         do {
-            weeklyGoals = try await healthKitManager.fetchCurrentWeekGoals(for: categories)
-            entries = try await healthKitManager.fetchCurrentWeekEntries(for: categories)
-            stripEntries = try await healthKitManager.fetchCurrentWeekEntries(for: HealthKitManager.categoryLibrary)
+            let rawGoalEntries = try await healthKitManager.fetchCurrentWeekEntries(for: categories)
+            let filteredGoalEntries = filterEntries(rawGoalEntries, using: categories)
+            weeklyGoals = categories.map {
+                WeeklyGoal.compute(for: $0, from: filteredGoalEntries.filter { !$0.isHidden })
+            }
+            entries = filteredGoalEntries
+
+            let rawStripEntries = try await healthKitManager.fetchCurrentWeekEntries(for: HealthKitManager.categoryLibrary)
+            stripEntries = filterEntries(rawStripEntries, using: HealthKitManager.categoryLibrary)
+
             errorMessage = nil
             lastRefreshed = Date()
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    // MARK: - Preference Filtering
+
+    /// Applies duration thresholds and type exclusions to a set of entries.
+    ///
+    /// - Parameters:
+    ///   - entries: Raw entries returned from HealthKit.
+    ///   - categorySource: The category array whose IDs the entries reference
+    ///     (`categories` for goal entries, `HealthKitManager.categoryLibrary` for strip entries).
+    private func filterEntries(_ entries: [WorkoutEntry], using categorySource: [WorkoutCategory]) -> [WorkoutEntry] {
+        let categoryMap = Dictionary(uniqueKeysWithValues: categorySource.map { ($0.id, $0) })
+        let walkingRaw = HealthKitManager.walkingActivityTypeRawValue
+
+        return entries.filter { entry in
+            let rawValues = categoryMap[entry.categoryId]?.activityTypeRawValues ?? []
+
+            // Drop excluded activity types
+            if rawValues.contains(where: { preferences.excludedActivityTypeRawValues.contains($0) }) {
+                return false
+            }
+
+            // Walking uses its own threshold; everything else uses the global one
+            let isWalking = rawValues.contains(walkingRaw)
+            let thresholdSeconds = TimeInterval(
+                (isWalking ? preferences.minWalkingDurationMinutes : preferences.minWorkoutDurationMinutes) * 60
+            )
+            return entry.duration >= thresholdSeconds
         }
     }
 
@@ -129,7 +170,7 @@ final class AppState: ObservableObject {
     }
     #endif
 
-    // MARK: - Persistence (categories only)
+    // MARK: - Persistence (categories)
 
     /// Loads categories from the shared App Group UserDefaults.
     /// Falls back to `UserDefaults.standard` if the App Group is not yet configured.
@@ -151,6 +192,53 @@ final class AppState: ObservableObject {
         if let data = try? JSONEncoder().encode(categories) {
             store.set(data, forKey: "categories")
         }
+    }
+
+    // MARK: - Persistence (preferences)
+
+    private func loadPreferences() {
+        let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
+        if let data = store.data(forKey: SharedConstants.UserDefaultsKey.preferences),
+           let saved = try? JSONDecoder().decode(UserPreferences.self, from: data) {
+            preferences = saved
+        }
+    }
+
+    func savePreferences() {
+        let store = SharedConstants.sharedDefaults ?? UserDefaults.standard
+        if let data = try? JSONEncoder().encode(preferences) {
+            store.set(data, forKey: SharedConstants.UserDefaultsKey.preferences)
+        }
+    }
+
+    // MARK: - Preference Mutations
+
+    func setMinWorkoutDuration(_ minutes: Int) {
+        preferences.minWorkoutDurationMinutes = minutes
+        savePreferences()
+    }
+
+    func setMinWalkingDuration(_ minutes: Int) {
+        preferences.minWalkingDurationMinutes = minutes
+        savePreferences()
+    }
+
+    /// Adds raw values to the exclusion set, removes any conflicting goals, and refreshes.
+    func excludeActivityType(_ rawValues: [Int]) {
+        let rawSet = Set(rawValues)
+        categories.removeAll { $0.activityTypeRawValues.contains(where: { rawSet.contains($0) }) }
+        weeklyGoals.removeAll { $0.category.activityTypeRawValues.contains(where: { rawSet.contains($0) }) }
+        preferences.excludedActivityTypeRawValues.formUnion(rawValues)
+        saveCategories()
+        savePreferences()
+        Task { await refreshGoals() }
+    }
+
+    /// Removes raw values from the exclusion set and refreshes.
+    func includeActivityType(_ rawValues: [Int]) {
+        preferences.excludedActivityTypeRawValues.subtract(rawValues)
+        savePreferences()
+        Task { await refreshGoals() }
     }
 
     // MARK: - Onboarding

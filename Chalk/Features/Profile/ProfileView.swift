@@ -1,8 +1,7 @@
 // ProfileView.swift
 // Chalk — Profile Tab
 //
-// Shows configured goals and HealthKit permission status.
-// Goal editing will be wired up when the goal creation flow is complete.
+// Shows user preferences and configured goals.
 
 import SwiftUI
 
@@ -14,6 +13,29 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             List {
+
+                // ── Preferences ──
+                Section("Preferences") {
+                    NavigationLink(destination: WorkoutDurationView()) {
+                        LabeledContent("Min Workout Duration") {
+                            Text("\(appState.preferences.minWorkoutDurationMinutes) min")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    NavigationLink(destination: WalkingDurationView()) {
+                        LabeledContent("Min Walking Duration") {
+                            Text("\(appState.preferences.minWalkingDurationMinutes) min")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    NavigationLink(destination: ExcludedTypesView()) {
+                        LabeledContent("Excluded Types") {
+                            Text(excludedTypeCount == 0 ? "None" : "\(excludedTypeCount) hidden")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
                 // ── Configured goals ──
                 Section("Your Goals") {
                     if appState.categories.isEmpty {
@@ -74,6 +96,16 @@ struct ProfileView: View {
             GoalSetupView(mode: .profile)
                 .environmentObject(appState)
         }
+    }
+
+    // MARK: - Helpers
+
+    private var excludedTypeCount: Int {
+        HealthKitManager.categoryLibrary.filter { category in
+            category.activityTypeRawValues.contains(where: {
+                appState.preferences.excludedActivityTypeRawValues.contains($0)
+            })
+        }.count
     }
 
     @ViewBuilder
