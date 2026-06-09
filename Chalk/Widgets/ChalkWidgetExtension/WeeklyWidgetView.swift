@@ -31,6 +31,7 @@ struct WeeklyWidgetView: View {
             WeeklyStripView(weekDays: entry.snapshot.weekDays,
                             isMonochrome: entry.isMonochrome)
                 .frame(maxWidth: .infinity)
+                .padding(.leading, 6)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
@@ -183,19 +184,25 @@ private struct WeeklyStripView: View {
     let isMonochrome: Bool
 
     var body: some View {
-        HStack(alignment: .bottom, spacing: 0) {
-            if weekDays.isEmpty {
-                // Placeholder columns when no snapshot exists yet
-                ForEach(0..<7, id: \.self) { _ in
-                    StripDayColumn(daySnapshot: nil, isMonochrome: isMonochrome,
-                                   today: Calendar.current.startOfDay(for: Date()))
-                }
-            } else {
-                ForEach(weekDays, id: \.date) { day in
-                    StripDayColumn(daySnapshot: day, isMonochrome: isMonochrome,
-                                   today: Calendar.current.startOfDay(for: Date()))
+        GeometryReader { geo in
+            let iconSize = geo.size.width / 7 * 0.75
+            HStack(alignment: .bottom, spacing: 0) {
+                if weekDays.isEmpty {
+                    // Placeholder columns when no snapshot exists yet
+                    ForEach(0..<7, id: \.self) { _ in
+                        StripDayColumn(daySnapshot: nil, isMonochrome: isMonochrome,
+                                       today: Calendar.current.startOfDay(for: Date()),
+                                       iconSize: iconSize)
+                    }
+                } else {
+                    ForEach(weekDays, id: \.date) { day in
+                        StripDayColumn(daySnapshot: day, isMonochrome: isMonochrome,
+                                       today: Calendar.current.startOfDay(for: Date()),
+                                       iconSize: iconSize)
+                    }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
     }
 }
@@ -205,6 +212,7 @@ private struct StripDayColumn: View {
     let daySnapshot: DaySnapshot?
     let isMonochrome: Bool
     let today: Date
+    let iconSize: CGFloat
 
     private enum Relation { case past, today, future }
 
@@ -226,44 +234,18 @@ private struct StripDayColumn: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            iconOrDate
+            StripDayIconArea(
+                icons: daySnapshot?.workoutIcons ?? [],
+                isMonochrome: isMonochrome,
+                iconSize: iconSize,
+                emptyText: dayNumber,
+                textColor: textColor
+            )
             Text(dayLetter)
                 .font(.system(size: 10, weight: relation == .today ? .semibold : .regular))
                 .foregroundStyle(textColor)
         }
         .frame(maxWidth: .infinity)
-    }
-
-    @ViewBuilder
-    private var iconOrDate: some View {
-        if let icon = daySnapshot?.workoutIcons.first {
-            workoutIcon(icon)
-        } else {
-            Text(dayNumber)
-                .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(textColor)
-                .frame(width: 20, height: 20, alignment: .center)
-        }
-    }
-
-    @ViewBuilder
-    private func workoutIcon(_ icon: String) -> some View {
-        if isMonochrome {
-            Image(systemName: "\(icon).circle.fill")
-                .resizable()
-                .symbolRenderingMode(.monochrome)
-                .foregroundStyle(
-                    LinearGradient(colors: [Color(white: 0.28), Color(white: 0.18)],
-                                   startPoint: .top, endPoint: .bottom)
-                )
-                .frame(width: 24, height: 24)
-        } else {
-            Image(systemName: "\(icon).circle.fill")
-                .resizable()
-                .symbolRenderingMode(.monochrome)
-                .foregroundStyle(WorkoutColorMapping.color(for: icon).gradient)
-                .frame(width: 24, height: 24)
-        }
     }
 
     private var dayLetter: String { DateFormatter.narrowWeekday.string(from: day) }

@@ -41,6 +41,7 @@
 		B7F4A843B084118CFBB08CD6 /* WorkoutColorMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6D27A4B50E49416D37073 /* WorkoutColorMapping.swift */; };
 		C2834DC3246C1787B57C583B /* WorkoutColorMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6D27A4B50E49416D37073 /* WorkoutColorMapping.swift */; };
 		CC1A2B3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */; };
+		D182BB14BA5775C6E3CE835A /* StripDayIconArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */; };
 		D5195807981FAA7C25B9C268 /* MockDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B517FBDFF1B7D9421B67DE1 /* MockDataView.swift */; };
 		D5A2419BD9F71C6B5B4659B4 /* GoalSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477A2E250F1ED8A1DA592ACA /* GoalSetupView.swift */; };
 		D734CB39598AC5A1DE4E1770 /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B303376FFB68E0436611978 /* GoalCardView.swift */; };
@@ -48,6 +49,7 @@
 		DC16BAE2D18FBF895E3DEA9D /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1873FB10790F679E6A5D4F /* AddGoalView.swift */; };
 		DD2A3B4C5D6E7F8A9B0C1D2E /* Chalk/chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */; };
 		EAD788E2DD1AF9687D049C91 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
+		F6C09B86139D1153D1DDF0F1 /* StripDayIconArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */; };
 		F78E3926FF1263AE9B97E964 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BC28B4E1CD99BADEDF689D /* UserPreferences.swift */; };
 		FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */; };
 /* End PBXBuildFile section */
@@ -122,6 +124,7 @@
 		890CFC29F19A7AA049E3A376 /* ChalkWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWidgetExtension.swift; sourceTree = "<group>"; };
 		8A2F0EE1093E98C8172DC4F3 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		8D6E89EE438AFEF4767E3D65 /* WorkoutDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDurationView.swift; sourceTree = "<group>"; };
+		8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripDayIconArea.swift; sourceTree = "<group>"; };
 		90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChalkWatch.entitlements; sourceTree = "<group>"; };
 		98F12DA7CE371E02E20D1218 /* Chalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chalk.entitlements; sourceTree = "<group>"; };
 		A0EC88D635EDBEF88E4DF592 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */,
+				8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */,
 				5202169202BF2935FE2E93C8 /* WidgetSnapshot.swift */,
 				4EB6D27A4B50E49416D37073 /* WorkoutColorMapping.swift */,
 			);
@@ -466,6 +470,7 @@
 				1B5432087863F7A5F73323D2 /* GoalEntity.swift in Sources */,
 				EAD788E2DD1AF9687D049C91 /* SharedConstants.swift in Sources */,
 				36B3D9F9D703A81E8BA320A2 /* SingleGoalWidgetView.swift in Sources */,
+				F6C09B86139D1153D1DDF0F1 /* StripDayIconArea.swift in Sources */,
 				70699BC4345E55BE5F40C0DB /* WeeklyWidgetView.swift in Sources */,
 				68E55A07315C47793A9A6EBA /* WidgetIntents.swift in Sources */,
 				43348E3561FE1A73442B1E3C /* WidgetProviders.swift in Sources */,
@@ -494,6 +499,7 @@
 				9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */,
 				3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */,
 				88F48B97C79B69625A5CC2BA /* StatsView.swift in Sources */,
+				D182BB14BA5775C6E3CE835A /* StripDayIconArea.swift in Sources */,
 				F78E3926FF1263AE9B97E964 /* UserPreferences.swift in Sources */,
 				466CFCCA7DD759F6EF61A831 /* WalkingDurationView.swift in Sources */,
 				504C91E730C6A2D5BE4C804A /* WeeklyActivityStrip.swift in Sources */,

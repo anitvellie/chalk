@@ -10,6 +10,11 @@ struct WeeklyActivityStrip: View {
     let entries: [WorkoutEntry]
     let categories: [WorkoutCategory]
 
+    /// Measured from the HStack on first layout; drives icon sizing.
+    @State private var columnWidth: CGFloat = 50
+
+    private var iconSize: CGFloat { columnWidth * 0.85 }
+
     private var categoryMap: [UUID: WorkoutCategory] {
         Dictionary(uniqueKeysWithValues: categories.map { ($0.id, $0) })
     }
@@ -44,8 +49,14 @@ struct WeeklyActivityStrip: View {
                 DayColumn(
                     day: day,
                     pairs: entriesByDay[day] ?? [],
-                    today: Calendar.current.startOfDay(for: Date())
+                    today: Calendar.current.startOfDay(for: Date()),
+                    iconSize: iconSize
                 )
+            }
+        }
+        .background {
+            GeometryReader { geo in
+                Color.clear.onAppear { columnWidth = geo.size.width / 7 }
             }
         }
         .padding(.horizontal, 12)
@@ -61,6 +72,7 @@ private struct DayColumn: View {
     let day: Date
     let pairs: [(WorkoutEntry, WorkoutCategory)]
     let today: Date
+    let iconSize: CGFloat
 
     private enum Relation { case past, today, future }
 
@@ -78,14 +90,19 @@ private struct DayColumn: View {
         }
     }
 
-    /// Entries sorted longest-first.
     private var sorted: [(WorkoutEntry, WorkoutCategory)] {
         pairs.sorted { $0.0.duration > $1.0.duration }
     }
 
     var body: some View {
         VStack(spacing: 10) {
-            iconArea
+            StripDayIconArea(
+                icons: sorted.map(\.1.icon),
+                isMonochrome: false,
+                iconSize: iconSize,
+                emptyText: dayNumber,
+                textColor: textColor
+            )
             Text(dayLetter)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(textColor)
@@ -93,85 +110,8 @@ private struct DayColumn: View {
         .frame(maxWidth: .infinity)
     }
 
-    @ViewBuilder
-    private var iconArea: some View {
-        switch sorted.count {
-        case 0:
-            Text(dayNumber)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(textColor)
-                .frame(width: 37, height: 37, alignment: .center)
-        case 1:
-            WorkoutIcon(category: sorted[0].1)
-        case 2:
-            TwoIconStack(top: sorted[0].1, bottom: sorted[1].1)
-        default:
-            OverflowIconStack(top: sorted[0].1, bottom: sorted[1].1, totalCount: sorted.count)
-        }
-    }
-
     private var dayLetter: String { DateFormatter.narrowWeekday.string(from: day) }
     private var dayNumber: String { DateFormatter.dayOfMonth.string(from: day) }
-}
-
-// MARK: - Icon views
-
-private struct WorkoutIcon: View {
-    let category: WorkoutCategory
-
-    var body: some View {
-        Image(systemName: "\(category.icon).circle.fill")
-            .resizable()
-            .symbolRenderingMode(.monochrome)
-            .foregroundStyle(category.displayColor.gradient)
-            .frame(width: 37, height: 37)
-    }
-}
-
-private struct TwoIconStack: View {
-    let top: WorkoutCategory
-    let bottom: WorkoutCategory
-
-    // Amount the bottom icon slides up behind the top one.
-    // VStack with negative spacing keeps the layout frame layout-correct —
-    // no .offset() tricks that fool the VStack spacing in DayColumn.
-    private static let overlap: CGFloat = 13
-
-    var body: some View {
-        VStack(spacing: -Self.overlap) {
-            WorkoutIcon(category: top)
-            // ZStack here only to layer the separator behind the bottom icon.
-            ZStack {
-                // Plugs the transparent cutout in the top icon so the
-                // bottom icon's colour doesn't bleed through.
-                Circle()
-                    .fill(Color(.systemBackground))
-                    .frame(width: 31, height: 31)
-                WorkoutIcon(category: bottom)
-            }
-        }
-    }
-}
-
-private struct OverflowIconStack: View {
-    let top: WorkoutCategory
-    let bottom: WorkoutCategory
-    let totalCount: Int
-
-    var body: some View {
-        TwoIconStack(top: top, bottom: bottom)
-            .overlay(alignment: .topTrailing) {
-                ZStack {
-                    Circle().fill(Color.red.opacity(1.0))
-                    Text("\(totalCount)")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(.white)
-                }
-                .frame(width: 23, height: 23)
-                // Sits at the top-right corner of the icon stack, overlapping slightly outward.
-                .offset(x: 6, y: 14)
-            }
-    }
 }
 
 // MARK: - Date formatters
