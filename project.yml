@@ -99,8 +99,6 @@ targets:
           - UIInterfaceOrientationPortrait
         NSHealthShareUsageDescription: "Chalk reads your workout history to track your weekly goals."
         NSHealthUpdateUsageDescription: "Chalk does not write any health data."
-        UIBackgroundModes:
-          - health-kit
         ITSAppUsesNonExemptEncryption: false
     settings:
       base:
