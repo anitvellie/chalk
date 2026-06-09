@@ -101,6 +101,7 @@ targets:
         NSHealthUpdateUsageDescription: "Chalk does not write any health data."
         UIBackgroundModes:
           - health-kit
+        ITSAppUsesNonExemptEncryption: false
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chalkweekly.app
