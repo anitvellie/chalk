@@ -26,7 +26,7 @@ struct WeeklyWidgetView: View {
                 .fill(Color.primary.opacity(0.12))
                 .frame(width: 0.5)
                 .padding(.vertical, 6)
-                .padding(.horizontal, 8)
+                .padding(.leading, 10)
 
             WeeklyStripView(weekDays: entry.snapshot.weekDays,
                             isMonochrome: entry.isMonochrome)
@@ -256,13 +256,13 @@ private struct StripDayColumn: View {
                     LinearGradient(colors: [Color(white: 0.28), Color(white: 0.18)],
                                    startPoint: .top, endPoint: .bottom)
                 )
-                .frame(width: 20, height: 20)
+                .frame(width: 24, height: 24)
         } else {
             Image(systemName: "\(icon).circle.fill")
                 .resizable()
                 .symbolRenderingMode(.monochrome)
                 .foregroundStyle(WorkoutColorMapping.color(for: icon).gradient)
-                .frame(width: 20, height: 20)
+                .frame(width: 24, height: 24)
         }
     }
 
