@@ -14,6 +14,7 @@ final class HealthKitManager: ObservableObject {
     // MARK: - Properties
 
     private let healthStore = HKHealthStore()
+    private var workoutObserverQuery: HKObserverQuery?
 
     /// `true` if HealthKit is supported on this device.
     /// Always `false` on Simulator; always `true` on iPhone.
@@ -322,14 +323,21 @@ final class HealthKitManager: ObservableObject {
     /// Registers HealthKit observer queries so the system can wake the app
     /// when new workouts are recorded, keeping weekly goal counts up to date.
     ///
-    /// ⚠️  Not called in Phase 2. Will be activated in Phase 4 when the widget
-    ///     needs to reload its timeline after new workouts arrive.
+    /// Registers for HealthKit background delivery so the widget snapshot stays
+    /// fresh even when the app is not running.
     ///
-    /// Prerequisites — add in Xcode before enabling:
-    ///   1. Signing & Capabilities → HealthKit → tick "Background Delivery"
-    ///   2. Entitlement added automatically: `com.apple.developer.healthkit.background-delivery`
-    ///   3. Info.plist: `UIBackgroundModes` array → add `health-kit`
-    func enableBackgroundDelivery() {
+    /// HealthKit can relaunch the app in the background when a new workout is saved.
+    /// On relaunch the observer query fires immediately, `onUpdate` is called, and
+    /// the completion handler is forwarded to HealthKit to confirm delivery.
+    ///
+    /// Safe to call multiple times — re-registration is a no-op if the query is
+    /// already active. Requires:
+    ///   - Entitlement: `com.apple.developer.healthkit.background-delivery`
+    ///   - Info.plist: `UIBackgroundModes` → `health-kit`
+    ///   - Xcode Signing & Capabilities → HealthKit → "Background Delivery" ticked
+    func enableBackgroundDelivery(onUpdate: @escaping () -> Void) {
+        guard workoutObserverQuery == nil else { return }
+
         let workoutType = HKObjectType.workoutType()
 
         healthStore.enableBackgroundDelivery(for: workoutType, frequency: .immediate) { success, error in
@@ -342,19 +350,16 @@ final class HealthKitManager: ObservableObject {
             }
         }
 
-        let observerQuery = HKObserverQuery(sampleType: workoutType, predicate: nil) { _, completionHandler, error in
+        let query = HKObserverQuery(sampleType: workoutType, predicate: nil) { _, completionHandler, error in
             defer { completionHandler() }
             if let error {
                 print("[Chalk] HKObserverQuery error: \(error.localizedDescription)")
                 return
             }
-            // TODO: Phase 4 — Refresh goals and reload widget timelines:
-            // Task { @MainActor in
-            //     await appState.refreshGoals()
-            //     WidgetCenter.shared.reloadAllTimelines()
-            // }
+            onUpdate()
         }
 
-        healthStore.execute(observerQuery)
+        workoutObserverQuery = query
+        healthStore.execute(query)
     }
 }

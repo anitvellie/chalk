@@ -83,6 +83,11 @@ final class AppState: ObservableObject {
         do {
             try await healthKitManager.requestAuthorization(for: categories)
             healthKitAuthorized = true
+            healthKitManager.enableBackgroundDelivery { [weak self] in
+                Task { @MainActor [weak self] in
+                    await self?.refreshGoals()
+                }
+            }
             await refreshGoals()
         } catch {
             errorMessage = error.localizedDescription
