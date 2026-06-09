@@ -74,7 +74,7 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 - HK activity type raw values are populated via `HealthKitManager.defaultCategories` (resolves from `HKWorkoutActivityType.case.rawValue`) — never hardcoded in model layer
 - A single `HKWorkoutType` authorisation request covers all activity types; no per-category request needed
 - `HealthKitManager.walkingActivityTypeRawValue: Int` — static property exposing the walking raw value as a plain `Int` so `AppState` can identify walking entries for threshold filtering without importing HealthKit
-- Background delivery is **implemented** in `HealthKitManager.enableBackgroundDelivery()` but **not yet activated** — wire it up in Phase 5 alongside watchOS; requires "Background Delivery" sub-capability in Xcode; widget timelines are currently refreshed by `WidgetCenter.shared.reloadAllTimelines()` called from `AppState.refreshGoals()` instead
+- Background delivery is **active** — `HealthKitManager.enableBackgroundDelivery(onUpdate:)` is called from `AppState.setupHealthKit()` after authorization; HealthKit relaunches the app in the background when a new workout is saved, the `HKObserverQuery` fires, `refreshGoals()` runs, and `WidgetCenter.shared.reloadAllTimelines()` updates the widgets without the user opening the app; requires "Background Delivery" sub-capability ticked in Xcode Signing & Capabilities (entitlement `com.apple.developer.healthkit.background-delivery` + `UIBackgroundModes: health-kit` in Info.plist are already set via `project.yml`)
 
 ### Duplicate workout detection
 - `WorkoutEntry.isHidden: Bool` (default `false`) marks entries suppressed by overlap deduplication
@@ -267,6 +267,7 @@ Chalk/                              ← git repo root
 │   │   └── HealthKitManager.swift  ← sole HealthKit importer; includes defaultCategories seed data
 │   ├── Shared/
 │   │   ├── SharedConstants.swift   ← App Group ID, UserDefaults keys, WidgetKind; compiled into app + widget
+│   │   ├── StripDayIconArea.swift  ← shared SwiftUI view for weekly strip day columns (0/1/2/3+ icon logic); geometry-driven iconSize; compiled into app + widget
 │   │   ├── WidgetSnapshot.swift    ← GoalSnapshot + DaySnapshot + WidgetSnapshot (Codable); app → widget bridge
 │   │   └── WorkoutColorMapping.swift ← icon→Color switch; compiled into app + widget (replaces per-target duplication)
 │   ├── Widgets/
