@@ -318,6 +318,26 @@ final class HealthKitManager: ObservableObject {
         return allEntries.sorted { $0.date > $1.date }
     }
 
+    /// Fetches all workout entries across the given categories for the current
+    /// calendar month. Used to populate the History tab's month calendar.
+    /// Results are sorted newest-first.
+    func fetchCurrentMonthEntries(for categories: [WorkoutCategory]) async throws -> [WorkoutEntry] {
+        let calendar = Calendar.current
+        guard let monthInterval = calendar.dateInterval(of: .month, for: Date()) else {
+            return []
+        }
+        var allEntries: [WorkoutEntry] = []
+        for category in categories {
+            let entries = try await fetchWorkouts(
+                for: category,
+                from: monthInterval.start,
+                to: monthInterval.end
+            )
+            allEntries.append(contentsOf: entries)
+        }
+        return allEntries.sorted { $0.date > $1.date }
+    }
+
     // MARK: - Background Delivery
 
     /// Registers HealthKit observer queries so the system can wake the app

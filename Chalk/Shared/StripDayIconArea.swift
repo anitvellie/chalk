@@ -41,21 +41,8 @@ struct StripDayIconArea: View {
 
     // MARK: - Sub-views
 
-    @ViewBuilder
     private func circleIcon(_ icon: String) -> some View {
-        if isMonochrome {
-            Image(systemName: "\(icon).circle.fill")
-                .resizable()
-                .symbolRenderingMode(.monochrome)
-                .foregroundStyle(monochromeGradient)
-                .frame(width: iconSize, height: iconSize)
-        } else {
-            Image(systemName: "\(icon).circle.fill")
-                .resizable()
-                .symbolRenderingMode(.monochrome)
-                .foregroundStyle(WorkoutColorMapping.color(for: icon).gradient)
-                .frame(width: iconSize, height: iconSize)
-        }
+        WorkoutCircleIcon(icon: icon, isMonochrome: isMonochrome, size: iconSize)
     }
 
     private func stackedIcons(top: String, bottom: String) -> some View {
@@ -85,12 +72,4 @@ struct StripDayIconArea: View {
     // MARK: - Sizing
 
     private var scale: CGFloat { iconSize / 36 }
-
-    private var monochromeGradient: LinearGradient {
-        LinearGradient(
-            colors: [Color(white: 0.28), Color(white: 0.18)],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
 }

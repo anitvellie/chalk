@@ -61,6 +61,7 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 ### Data model
 - `WorkoutCategory` has **no `colorHex` field** — colour is derived entirely in the view layer
 - `WorkoutCategory.displayColor: Color` — app-only view extension in `Chalk/App/WorkoutCategory+Color.swift`; forwards to `WorkoutColorMapping.color(for: icon)` (in Shared) which holds the full icon→`Color(uiColor:)` switch. `WorkoutColorMapping` is compiled into both the app and widget extension — add a new `case` there whenever a new type is added to `categoryLibrary`
+- Shared UI styling lives in `Chalk/App/Theme.swift`: `GlassCardModifier`/`.glassCard()` (the frosted card surface used by goal cards, weekly strip, month calendar) and `DayRelation` (past `#D6D6D6` / today `.primary` / future `#898989` day-number colouring). Don't re-declare card or day-colour logic in feature files — extend `Theme.swift`. Workout icon rendering is centralised in `Chalk/Shared/WorkoutCircleIcon.swift`
 - Rowing icon is `figure.indoor.rowing` (not `figure.rowing` — that symbol does not exist in SF Symbols)
 - `WorkoutEntry.categoryId` is a UUID reference, not an embedded object
 - `WorkoutSource` is an enum: `.healthKit` / `.manual`
@@ -151,7 +152,10 @@ In `categoryLibrary` (the picker catalog), Strength and Functional Strength are 
 - Onboarding "Get Started" → `GoalSetupView(mode: .onboarding)` full-screen cover → `completeOnboarding()` on Continue or Skip
 
 #### History
-- `HistoryView` sources from `appState.stripEntries` (all 65 HealthKit types) — not `appState.entries` (goal-matched only); category names and icons resolved from `HealthKitManager.categoryLibrary`; this means all workouts logged that week appear in History regardless of whether the user has a matching goal
+- `HistoryView` is a `ScrollView`: `MonthCalendarView` (current month) at the top, then a `Divider`, a "Current week" heading, and the week's entry rows
+- Month calendar sources from `appState.monthEntries` (all 65 types, current calendar month); the week list still sources from `appState.stripEntries` (all 65 types, current ISO week) — not `appState.entries` (goal-matched only); category names and icons resolved from `HealthKitManager.categoryLibrary`; this means all workouts logged appear regardless of whether the user has a matching goal
+- `MonthCalendarView` (`Chalk/Features/History/MonthCalendarView.swift`): glass card; "MMM yyyy" header; locale-aware weekday header + week start via `Calendar.current.firstWeekday`; 7-col `LazyVGrid` with leading blanks to align day 1. Per-day `CalendarDayCell`: 0 workouts → day-of-month number (coloured via `DayRelation`); 1 → main icon; 2 → longest as main + the other as a smaller icon overlapping its lower-right; 3+ → same plus a small red count badge. Only the current month is shown (full-calendar navigation deferred); an empty month renders as plain numbers
+- `appState.monthEntries` is fetched via `HealthKitManager.fetchCurrentMonthEntries(for:)` (current `.month` interval) and filtered through `filterEntries` alongside `stripEntries` in `refreshGoals()`
 
 #### Profile preferences
 - ProfileView has a **Preferences** section above Goals with three `NavigationLink` rows:
@@ -238,6 +242,7 @@ Chalk/                              ← git repo root
 │   │   ├── ChalkApp.swift              ← @main entry + Color(hex:) + chalkBackground modifier
 │   │   ├── RootView.swift              ← TabView shell + CustomTabBar + Tab enum
 │   │   ├── AppState.swift              ← central @MainActor ObservableObject
+│   │   ├── Theme.swift                 ← single source for GlassCardModifier/.glassCard() + DayRelation (past/today/future colours)
 │   │   └── WorkoutCategory+Color.swift ← displayColor extension; single source of truth for category colours
 │   ├── Models/
 │   │   ├── WorkoutCategory.swift
@@ -252,7 +257,8 @@ Chalk/                              ← git repo root
 │   │   ├── Stats/
 │   │   │   └── StatsView.swift     ← total sessions + per-category progress bars
 │   │   ├── History/
-│   │   │   └── HistoryView.swift   ← sorted entry list with category chip + duration
+│   │   │   ├── HistoryView.swift        ← month calendar card + "Current week" entry list
+│   │   │   └── MonthCalendarView.swift  ← current-month glass calendar; CalendarDayCell (0/1/2/3+ icon logic)
 │   │   ├── Profile/
 │   │   │   ├── ProfileView.swift           ← preferences section + goal list + HK auth status
 │   │   │   ├── WorkoutDurationView.swift   ← min workout duration stepper (5–60 min, 5-min steps)
@@ -268,6 +274,7 @@ Chalk/                              ← git repo root
 │   ├── Shared/
 │   │   ├── SharedConstants.swift   ← App Group ID, UserDefaults keys, WidgetKind; compiled into app + widget
 │   │   ├── StripDayIconArea.swift  ← shared SwiftUI view for weekly strip day columns (0/1/2/3+ icon logic); geometry-driven iconSize; compiled into app + widget
+│   │   ├── WorkoutCircleIcon.swift ← shared circular workout SF Symbol renderer (colour/monochrome); used by strip + calendar; compiled into app + widget
 │   │   ├── WidgetSnapshot.swift    ← GoalSnapshot + DaySnapshot + WidgetSnapshot (Codable); app → widget bridge
 │   │   └── WorkoutColorMapping.swift ← icon→Color switch; compiled into app + widget (replaces per-target duplication)
 │   ├── Widgets/

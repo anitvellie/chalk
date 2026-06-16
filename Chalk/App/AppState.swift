@@ -23,6 +23,10 @@ final class AppState: ObservableObject {
     /// Shows workouts in the strip even when they don't match a configured goal.
     @Published var stripEntries: [WorkoutEntry] = []
 
+    /// Entries for all known library types across the current calendar month,
+    /// used by the History tab's month calendar.
+    @Published var monthEntries: [WorkoutEntry] = []
+
     /// Weekly goal snapshots for the current ISO week, one per category.
     @Published var weeklyGoals: [WeeklyGoal] = []
 
@@ -118,6 +122,9 @@ final class AppState: ObservableObject {
             let rawStripEntries = try await healthKitManager.fetchCurrentWeekEntries(for: HealthKitManager.categoryLibrary)
             stripEntries = filterEntries(rawStripEntries, using: HealthKitManager.categoryLibrary)
 
+            let rawMonthEntries = try await healthKitManager.fetchCurrentMonthEntries(for: HealthKitManager.categoryLibrary)
+            monthEntries = filterEntries(rawMonthEntries, using: HealthKitManager.categoryLibrary)
+
             errorMessage = nil
             lastRefreshed = Date()
             let snapshot = buildWidgetSnapshot()
@@ -164,6 +171,8 @@ final class AppState: ObservableObject {
     func applyMock(entries: [WorkoutEntry]) {
         isMockActive = true
         self.entries = entries
+        stripEntries = entries
+        monthEntries = entries
         weeklyGoals = categories.map { WeeklyGoal.compute(for: $0, from: entries) }
     }
 
@@ -171,6 +180,8 @@ final class AppState: ObservableObject {
     func clearMock() async {
         isMockActive = false
         entries = []
+        stripEntries = []
+        monthEntries = []
         if healthKitAuthorized {
             await refreshGoals()
         } else {

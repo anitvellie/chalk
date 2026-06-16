@@ -74,20 +74,8 @@ private struct DayColumn: View {
     let today: Date
     let iconSize: CGFloat
 
-    private enum Relation { case past, today, future }
-
-    private var relation: Relation {
-        if day < today { return .past }
-        if day == today { return .today }
-        return .future
-    }
-
     private var textColor: Color {
-        switch relation {
-        case .today:  return .primary
-        case .past:   return Color(hex: "#D6D6D6")
-        case .future: return Color(hex: "#898989")
-        }
+        DayRelation(day: day, relativeTo: today).textColor
     }
 
     private var sorted: [(WorkoutEntry, WorkoutCategory)] {

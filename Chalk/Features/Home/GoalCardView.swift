@@ -49,26 +49,7 @@ struct GoalCardView: View {
             .frame(maxWidth: .infinity)
         }
         .padding(16)
-        .modifier(GlassCardModifier())
-    }
-}
-
-// MARK: - Glass Card Modifier
-
-struct GlassCardModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 26, *) {
-            content
-                .glassEffect(in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        } else {
-            content
-                .background(.regularMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.5), lineWidth: 1)
-                }
-        }
+        .glassCard()
     }
 }
 

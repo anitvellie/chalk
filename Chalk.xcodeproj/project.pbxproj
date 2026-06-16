@@ -10,6 +10,7 @@
 		022931DC27BCAFEFFDAA8324 /* ChalkWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = C74F5CE05460B30B34DAFCCE /* ChalkWatch.app */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03AC0030E12E62866251762B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7699C284F9D58C082638E2 /* HistoryView.swift */; };
 		0ECAD737BD11820127F1EF47 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25650C2677D84948E833BB97 /* AppState.swift */; };
+		10075CB3BB4CBA9C9503DEC4 /* WorkoutCircleIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1672091CD24350A89FB50E96 /* WorkoutCircleIcon.swift */; };
 		1B5432087863F7A5F73323D2 /* GoalEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8125D701A85BE6334BCFEA2 /* GoalEntity.swift */; };
 		1EBE8DA0CFB2A123CA0FA3E8 /* ExcludedTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB616D999C8063F7DF7344F0 /* ExcludedTypesView.swift */; };
 		25CB557B1A68044FE201EC31 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DE07972FE885C4C9F560F /* ProfileView.swift */; };
@@ -23,6 +24,7 @@
 		43348E3561FE1A73442B1E3C /* WidgetProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E5D114F0668DB42422FDFC /* WidgetProviders.swift */; };
 		466CFCCA7DD759F6EF61A831 /* WalkingDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D5144652F9142BB5068D82 /* WalkingDurationView.swift */; };
 		493A85FC55643523AFA99A28 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCA6A536DAA2D56D041F113 /* HomeView.swift */; };
+		49628692B6F394AD11CAD2C1 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7DF0399B8D0AB8876332B9 /* MonthCalendarView.swift */; };
 		504C91E730C6A2D5BE4C804A /* WeeklyActivityStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26090F98CE73253C07B1BC6 /* WeeklyActivityStrip.swift */; };
 		58F3912B04F2D4C8E6228923 /* ChalkWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		68E55A07315C47793A9A6EBA /* WidgetIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785644C1EE55AEEFFA4E78BE /* WidgetIntents.swift */; };
@@ -35,23 +37,25 @@
 		841D501221652756E238C3E6 /* AllGoalsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C891CCDFA86BC5C090AD832 /* AllGoalsWidgetView.swift */; };
 		88F48B97C79B69625A5CC2BA /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2F0EE1093E98C8172DC4F3 /* StatsView.swift */; };
 		935E6364EC56A959D75E7D34 /* WorkoutCategory+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021130A565E625E412AB496 /* WorkoutCategory+Color.swift */; };
+		9C317C36C7754ED504A5FBCB /* WorkoutCircleIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1672091CD24350A89FB50E96 /* WorkoutCircleIcon.swift */; };
 		9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8996BAC4BE1B0933799F2A /* RootView.swift */; };
+		A587CB535B3DC2240685FB89 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2235A613049375306177FF4 /* Theme.swift */; };
 		A5FE3B26D2A66263EB74B396 /* MockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EEB28F0796E195B8EAC61A /* MockDataManager.swift */; };
 		AF9746C18CBB9F6E03ECCD98 /* WeeklyGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EC4AB09416D122BD6B0271 /* WeeklyGoal.swift */; };
 		B7F4A843B084118CFBB08CD6 /* WorkoutColorMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6D27A4B50E49416D37073 /* WorkoutColorMapping.swift */; };
 		C2834DC3246C1787B57C583B /* WorkoutColorMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6D27A4B50E49416D37073 /* WorkoutColorMapping.swift */; };
+		CC1A2B3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */; };
 		D182BB14BA5775C6E3CE835A /* StripDayIconArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */; };
 		D5195807981FAA7C25B9C268 /* MockDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B517FBDFF1B7D9421B67DE1 /* MockDataView.swift */; };
 		D5A2419BD9F71C6B5B4659B4 /* GoalSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477A2E250F1ED8A1DA592ACA /* GoalSetupView.swift */; };
 		D734CB39598AC5A1DE4E1770 /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B303376FFB68E0436611978 /* GoalCardView.swift */; };
 		DB2FF06516BF92CDDA2A4C57 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7B4A4B527C59DC38663E0 /* HealthKitManager.swift */; };
 		DC16BAE2D18FBF895E3DEA9D /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1873FB10790F679E6A5D4F /* AddGoalView.swift */; };
+		DD2A3B4C5D6E7F8A9B0C1D2E /* Chalk/chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */; };
 		EAD788E2DD1AF9687D049C91 /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */; };
 		F6C09B86139D1153D1DDF0F1 /* StripDayIconArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */; };
 		F78E3926FF1263AE9B97E964 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BC28B4E1CD99BADEDF689D /* UserPreferences.swift */; };
 		FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */; };
-		CC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
-		DD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,11 +104,13 @@
 		0021130A565E625E412AB496 /* WorkoutCategory+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutCategory+Color.swift"; sourceTree = "<group>"; };
 		0786F0FFD288F9248DC27B7E /* WorkoutEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEntry.swift; sourceTree = "<group>"; };
 		08EC4AB09416D122BD6B0271 /* WeeklyGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyGoal.swift; sourceTree = "<group>"; };
+		1672091CD24350A89FB50E96 /* WorkoutCircleIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCircleIcon.swift; sourceTree = "<group>"; };
 		1A638B411D672AD02302874C /* WorkoutCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCategory.swift; sourceTree = "<group>"; };
-		220D8F721FD74B8B2E1F800D /* Chalk.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Chalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		220D8F721FD74B8B2E1F800D /* Chalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25650C2677D84948E833BB97 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ChalkWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		293B1345ABB0DB867CAF6836 /* ChalkWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChalkWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9B4826674EA70468935362 /* ChalkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkApp.swift; sourceTree = "<group>"; };
+		2F7DF0399B8D0AB8876332B9 /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
 		3B517FBDFF1B7D9421B67DE1 /* MockDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataView.swift; sourceTree = "<group>"; };
 		3F7699C284F9D58C082638E2 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		46E5D114F0668DB42422FDFC /* WidgetProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetProviders.swift; sourceTree = "<group>"; };
@@ -129,6 +135,7 @@
 		98F12DA7CE371E02E20D1218 /* Chalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chalk.entitlements; sourceTree = "<group>"; };
 		A0EC88D635EDBEF88E4DF592 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		A5D5144652F9142BB5068D82 /* WalkingDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkingDurationView.swift; sourceTree = "<group>"; };
+		AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Chalk/chalk_app_icon.icon; sourceTree = SOURCE_ROOT; };
 		B26090F98CE73253C07B1BC6 /* WeeklyActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyActivityStrip.swift; sourceTree = "<group>"; };
 		B2E6193503B55F3A79F88177 /* SingleGoalWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleGoalWidgetView.swift; sourceTree = "<group>"; };
 		B647F8597ECDAEAE27026D36 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
@@ -140,11 +147,11 @@
 		CB616D999C8063F7DF7344F0 /* ExcludedTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcludedTypesView.swift; sourceTree = "<group>"; };
 		CD8996BAC4BE1B0933799F2A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		CFCA6A536DAA2D56D041F113 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D2235A613049375306177FF4 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		D8125D701A85BE6334BCFEA2 /* GoalEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEntity.swift; sourceTree = "<group>"; };
 		EB1873FB10790F679E6A5D4F /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		F4653102AB269C5F14198ED2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkWatchApp.swift; sourceTree = "<group>"; };
-		AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Chalk/chalk_app_icon.icon; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -185,7 +192,6 @@
 				DB0B8210E547CB58CF7F3C27 /* Models */,
 				8BE6288F356FF9CD536E91E8 /* Shared */,
 				F4653102AB269C5F14198ED2 /* Assets.xcassets */,
-				AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */,
 				98F12DA7CE371E02E20D1218 /* Chalk.entitlements */,
 				6523D743F07E4B507027D7DB /* Info.plist */,
 			);
@@ -214,7 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				871B0D601CAFFDC4967012FB /* Assets.xcassets */,
-				AA1B2C3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon */,
+				AA1B2C3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon */,
 				90F9C85CBBFFCF10A9B5763B /* ChalkWatch.entitlements */,
 				FBCE763B5883ED2D4D40B386 /* ChalkWatchApp.swift */,
 				85189A9997D171E3E7757A20 /* Info.plist */,
@@ -243,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				3F7699C284F9D58C082638E2 /* HistoryView.swift */,
+				2F7DF0399B8D0AB8876332B9 /* MonthCalendarView.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -253,6 +260,7 @@
 				BAE2DC932FE7D4FEAE51FEEE /* SharedConstants.swift */,
 				8EA0D69BCF1F2EEF99A34979 /* StripDayIconArea.swift */,
 				5202169202BF2935FE2E93C8 /* WidgetSnapshot.swift */,
+				1672091CD24350A89FB50E96 /* WorkoutCircleIcon.swift */,
 				4EB6D27A4B50E49416D37073 /* WorkoutColorMapping.swift */,
 			);
 			path = Shared;
@@ -264,6 +272,7 @@
 				25650C2677D84948E833BB97 /* AppState.swift */,
 				2A9B4826674EA70468935362 /* ChalkApp.swift */,
 				CD8996BAC4BE1B0933799F2A /* RootView.swift */,
+				D2235A613049375306177FF4 /* Theme.swift */,
 				0021130A565E625E412AB496 /* WorkoutCategory+Color.swift */,
 			);
 			path = App;
@@ -403,15 +412,12 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					166887360A5DA10F1795995D = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					3328DA0AF66E48D908073020 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					7CBB71874FB9BB11BDF222D2 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -441,7 +447,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39E8F6EA15A0388675697DDC /* Assets.xcassets in Resources */,
-				CC1A2B3D4E5F6A7B8C9D0E1F /* chalk_app_icon.icon in Resources */,
+				CC1A2B3D4E5F6A7B8C9D0E1F /* Chalk/chalk_app_icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,7 +456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				815574C0DC5556766D3BBB6E /* Assets.xcassets in Resources */,
-				DD2A3B4C5D6E7F8A9B0C1D2E /* chalk_app_icon.icon in Resources */,
+				DD2A3B4C5D6E7F8A9B0C1D2E /* Chalk/chalk_app_icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +485,7 @@
 				68E55A07315C47793A9A6EBA /* WidgetIntents.swift in Sources */,
 				43348E3561FE1A73442B1E3C /* WidgetProviders.swift in Sources */,
 				7D099768116281A7D82E63F2 /* WidgetSnapshot.swift in Sources */,
+				9C317C36C7754ED504A5FBCB /* WorkoutCircleIcon.swift in Sources */,
 				B7F4A843B084118CFBB08CD6 /* WorkoutColorMapping.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,12 +505,14 @@
 				493A85FC55643523AFA99A28 /* HomeView.swift in Sources */,
 				A5FE3B26D2A66263EB74B396 /* MockDataManager.swift in Sources */,
 				D5195807981FAA7C25B9C268 /* MockDataView.swift in Sources */,
+				49628692B6F394AD11CAD2C1 /* MonthCalendarView.swift in Sources */,
 				295F8CE1085110773D6050B9 /* OnboardingView.swift in Sources */,
 				25CB557B1A68044FE201EC31 /* ProfileView.swift in Sources */,
 				9EC7453CD7C81F5D6D5E0A79 /* RootView.swift in Sources */,
 				3816EF9A4B573E3CCFC19E2C /* SharedConstants.swift in Sources */,
 				88F48B97C79B69625A5CC2BA /* StatsView.swift in Sources */,
 				D182BB14BA5775C6E3CE835A /* StripDayIconArea.swift in Sources */,
+				A587CB535B3DC2240685FB89 /* Theme.swift in Sources */,
 				F78E3926FF1263AE9B97E964 /* UserPreferences.swift in Sources */,
 				466CFCCA7DD759F6EF61A831 /* WalkingDurationView.swift in Sources */,
 				504C91E730C6A2D5BE4C804A /* WeeklyActivityStrip.swift in Sources */,
@@ -511,6 +520,7 @@
 				81AA7FB379E9A9AD457D498F /* WidgetSnapshot.swift in Sources */,
 				935E6364EC56A959D75E7D34 /* WorkoutCategory+Color.swift in Sources */,
 				3278B5BB384191F27BC87BEE /* WorkoutCategory.swift in Sources */,
+				10075CB3BB4CBA9C9503DEC4 /* WorkoutCircleIcon.swift in Sources */,
 				C2834DC3246C1787B57C583B /* WorkoutColorMapping.swift in Sources */,
 				6DFDA1DD4BE11B1833BB9A21 /* WorkoutDurationView.swift in Sources */,
 				FBFE5B944653D39086CDC267 /* WorkoutEntry.swift in Sources */,
@@ -538,6 +548,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Widgets/ChalkWidgetExtension/ChalkWidgetExtension.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Widgets/ChalkWidgetExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -556,6 +567,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Widgets/ChalkWidgetExtension/ChalkWidgetExtension.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Widgets/ChalkWidgetExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -577,6 +589,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Chalk.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -660,6 +673,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = chalk_app_icon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ChalkWatch/ChalkWatch.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = ChalkWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chalkweekly.app.watchkitapp;
 				SDKROOT = watchos;
@@ -677,6 +691,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Chalk/Chalk.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = Chalk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -695,6 +710,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = chalk_app_icon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ChalkWatch/ChalkWatch.entitlements;
+				DEVELOPMENT_TEAM = 9F7853B85Y;
 				INFOPLIST_FILE = ChalkWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chalkweekly.app.watchkitapp;
 				SDKROOT = watchos;
